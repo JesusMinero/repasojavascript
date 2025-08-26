@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manipulación del DOM con JavaScript</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .back-button {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+        }
+        
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        h3 {
+            color: var(--primary);
+            margin: 1.5rem 0 1rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+        
+        .code-comment {
+            color: #75715e;
+        }
+        
+        .code-keyword {
+            color: #f92672;
+        }
+        
+        .code-function {
+            color: #e6db74;
+        }
+        
+        .code-variable {
+            color: #a6e22e;
+        }
+        
+        .code-string {
+            color: #ae81ff;
+        }
+        
+        .example-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .code-example, .output-example {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .output-example {
+            background-color: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .interactive-demo {
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border: 1px solid #ddd;
+        }
+        
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: var(--secondary);
+        }
+        
+        input, select {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .exercise {
+            background-color: #e8f4fc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .exercise h3 {
+            color: var(--accent);
+        }
+        
+        .solution {
+            display: none;
+            margin-top: 1rem;
+        }
+        
+        .toggle-solution {
+            background-color: var(--accent);
+            margin-top: 1rem;
+        }
+        
+        .tab-container {
+            margin: 2rem 0;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .tab-button {
+            padding: 1rem 1.5rem;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .tab-button.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .highlight {
+            background-color: yellow;
+        }
+        
+        .dom-element {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .example-container {
+                flex-direction: column;
+            }
+            
+            .tab-buttons {
+                flex-direction: column;
+            }
+            
+            .back-button {
+                position: relative;
+                left: 0;
+                top: 0;
+                transform: none;
+                margin-bottom: 1rem;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-button">← Volver al Índice</a>
+        <h1>Manipulación del DOM con JavaScript</h1>
+        <p class="subtitle">Ejercicios básicos de manipulación del DOM con JavaScript</p>
+    </header>
+    
+    <div class="container">
+        <section class="section">
+            <h2>Introducción</h2>
+            <p>El DOM (Document Object Model) es una representación en forma de árbol de los elementos de un documento HTML. JavaScript nos permite manipular este DOM para cambiar el contenido, la estructura y el estilo de una página web de forma dinámica.</p>
+        </section>
+        
+        <section class="section">
+            <h2>Selección de Elementos del DOM</h2>
+            <p>En este ejemplo, seleccionaremos elementos del DOM usando diferentes métodos.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Métodos de Selección</h3>
+                    <div class="code-block">
+                        <span class="code-comment">// Seleccionar por ID</span><br>
+                        <span class="code-keyword">const</span> elementById = document.getElementById(<span class="code-string">'myId'</span>);<br><br>
+                        
+                        <span class="code-comment">// Seleccionar por clase (devuelve HTMLCollection)</span><br>
+                        <span class="code-keyword">const</span> elementsByClass = document.getElementsByClassName(<span class="code-string">'myClass'</span>);<br><br>
+                        
+                        <span class="code-comment">// Seleccionar por etiqueta (devuelve HTMLCollection)</span><br>
+                        <span class="code-keyword">const</span> elementsByTag = document.getElementsByTagName(<span class="code-string">'p'</span>);<br><br>
+                        
+                        <span class="code-comment">// Seleccionar con querySelector (primer elemento que coincide)</span><br>
+                        <span class="code-keyword">const</span> elementQuery = document.querySelector(<span class="code-string">'.myClass'</span>);<br><br>
+                        
+                        <span class="code-comment">// Seleccionar con querySelectorAll (todos los elementos que coinciden)</span><br>
+                        <span class="code-keyword">const</span> elementsQueryAll = document.querySelectorAll(<span class="code-string">'p.myClass'</span>);
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Prueba los selectores</h3>
+                    <div class="interactive-demo">
+                        <div id="test-element" class="demo-element">Elemento con ID "test-element"</div>
+                        <div class="demo-element">Elemento con clase "demo-element"</div>
+                        <div class="demo-element">Otro elemento con clase "demo-element"</div>
+                        
+                        <div class="demo-controls">
+                            <button onclick="selectById()">Seleccionar por ID</button>
+                            <button onclick="selectByClass()">Seleccionar por Clase</button>
+                            <button onclick="selectByTag()">Seleccionar por Etiqueta</button>
+                            <button onclick="selectWithQuery()">Usar querySelector</button>
+                        </div>
+                        
+                        <div id="selection-result"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Manipulación de Contenido y Estilos</h2>
+            <p>Aquí cambiaremos el texto y los estilos de un elemento del DOM.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Código JavaScript</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> myDiv = document.getElementById(<span class="code-string">'myDiv'</span>);<br><br>
+                        
+                        <span class="code-comment">// Cambiar el texto del elemento</span><br>
+                        document.getElementById(<span class="code-string">'changeText'</span>).addEventListener(<span class="code-string">'click'</span>, () => {<br>
+                        &nbsp;&nbsp;myDiv.textContent = <span class="code-string">'Text Changed'</span>;<br>
+                        });<br><br>
+                        
+                        <span class="code-comment">// Cambiar el estilo del elemento</span><br>
+                        document.getElementById(<span class="code-string">'changeStyle'</span>).addEventListener(<span class="code-string">'click'</span>, () => {<br>
+                        &nbsp;&nbsp;myDiv.style.color = <span class="code-string">'red'</span>;<br>
+                        &nbsp;&nbsp;myDiv.style.fontSize = <span class="code-string">'24px'</span>;<br>
+                        });
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado</h3>
+                    <div class="interactive-demo">
+                        <div id="myDiv" class="dom-element">Hello, World!</div>
+                        
+                        <div class="demo-controls">
+                            <button id="changeText">Change Text</button>
+                            <button id="changeStyle">Change Style</button>
+                            <button onclick="resetElement()">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Eventos del DOM</h2>
+            <p>En este ejemplo, manejaremos eventos del DOM para interactuar con los elementos de la página.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Código JavaScript</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> myDiv = document.getElementById(<span class="code-string">'myDiv'</span>);<br><br>
+                        
+                        <span class="code-comment">// Manejar el evento click</span><br>
+                        myDiv.addEventListener(<span class="code-string">'click'</span>, () => {<br>
+                        &nbsp;&nbsp;alert(<span class="code-string">'Div clicked!'</span>);<br>
+                        &nbsp;&nbsp;myDiv.style.backgroundColor = <span class="code-string">'lightblue'</span>;<br>
+                        });<br><br>
+                        
+                        <span class="code-comment">// Manejar el evento mouseover</span><br>
+                        myDiv.addEventListener(<span class="code-string">'mouseover'</span>, () => {<br>
+                        &nbsp;&nbsp;myDiv.style.backgroundColor = <span class="code-string">'yellow'</span>;<br>
+                        });<br><br>
+                        
+                        <span class="code-comment">// Manejar el evento mouseout</span><br>
+                        myDiv.addEventListener(<span class="code-string">'mouseout'</span>, () => {<br>
+                        &nbsp;&nbsp;myDiv.style.backgroundColor = <span class="code-string">''</span>;<br>
+                        });
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado</h3>
+                    <div class="interactive-demo">
+                        <div id="interactiveDiv" class="dom-element" style="padding: 2rem; text-align: center; cursor: pointer;">
+                            ¡Pasa el mouse sobre mí o haz clic!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Manipulación Completa del DOM</h2>
+            <p>Crea una página HTML con varios elementos y utiliza JavaScript para realizar diversas manipulaciones.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Código JavaScript</h3>
+                    <div class="code-block">
+                        <span class="code-comment">// Cambiar el contenido del título</span><br>
+                        document.getElementById(<span class="code-string">'changeContent'</span>).addEventListener(<span class="code-string">'click'</span>, () => {<br>
+                        &nbsp;&nbsp;document.getElementById(<span class="code-string">'title'</span>).textContent = <span class="code-string">'Content Changed!'</span>;<br>
+                        });<br><br>
+                        
+                        <span class="code-comment">// Resaltar todos los párrafos</span><br>
+                        document.getElementById(<span class="code-string">'highlightText'</span>).addEventListener(<span class="code-string">'click'</span>, () => {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">const</span> paragraphs = document.querySelectorAll(<span class="code-string">'.text'</span>);<br>
+                        &nbsp;&nbsp;paragraphs.forEach(p => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;p.classList.toggle(<span class="code-string">'highlight'</span>);<br>
+                        &nbsp;&nbsp;});<br>
+                        });
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado</h3>
+                    <div class="interactive-demo">
+                        <h1 id="title">My Web Page</h1>
+                        <p class="text">This is a paragraph.</p>
+                        <p class="text">This is another paragraph.</p>
+                        
+                        <div class="demo-controls">
+                            <button id="changeContent">Change Content</button>
+                            <button id="highlightText">Highlight Text</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Ejercicio Práctico</h2>
+            <p>Crear una página HTML simple y usar JavaScript para seleccionar elementos del DOM, manipular su contenido y estilos, y manejar eventos del DOM.</p>
+            
+            <div class="exercise">
+                <h3>Instrucciones:</h3>
+                <ol>
+                    <li><strong>Crear una página HTML básica:</strong>
+                        <ul>
+                            <li>Incluir un encabezado (h1), un párrafo (p), una lista desordenada (ul) con varios elementos de lista (li) y un botón (button).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Usar JavaScript para manipular el DOM:</strong>
+                        <ul>
+                            <li>Seleccionar elementos del DOM usando getElementById, getElementsByClassName, getElementsByTagName, querySelector, y querySelectorAll.</li>
+                            <li>Cambiar el contenido del encabezado y del párrafo.</li>
+                            <li>Cambiar los estilos de los elementos de lista.</li>
+                            <li>Agregar y quitar clases CSS a los elementos.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Manejar eventos del DOM:</strong>
+                        <ul>
+                            <li>Agregar un evento click al botón para cambiar el contenido del encabezado.</li>
+                            <li>Agregar eventos mouseover y mouseout a los elementos de la lista para cambiar su color de fondo cuando el mouse pasa sobre ellos.</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <button class="toggle-solution" onclick="toggleSolution('exerciseSolution')">Ver Solución</button>
+                
+                <div id="exerciseSolution" class="solution">
+                    <h4>Solución:</h4>
+                    <div class="code-block">
+                        <span class="code-comment">&lt;!-- HTML --&gt;</span><br>
+                        &lt;h1 id="mainTitle"&gt;Título Principal&lt;/h1&gt;<br>
+                        &lt;p class="description"&gt;Este es un párrafo de ejemplo.&lt;/p&gt;<br>
+                        &lt;ul id="myList"&gt;<br>
+                        &nbsp;&nbsp;&lt;li&gt;Elemento 1&lt;/li&gt;<br>
+                        &nbsp;&nbsp;&lt;li&gt;Elemento 2&lt;/li&gt;<br>
+                        &nbsp;&nbsp;&lt;li&gt;Elemento 3&lt;/li&gt;<br>
+                        &lt;/ul&gt;<br>
+                        &lt;button id="changeTitle"&gt;Cambiar Título&lt;/button&gt;<br><br>
+                        
+                        <span class="code-comment">// JavaScript</span><br>
+                        <span class="code-comment">// Seleccionar elementos</span><br>
+                        <span class="code-keyword">const</span> title = document.getElementById(<span class="code-string">'mainTitle'</span>);<br>
+                        <span class="code-keyword">const</span> description = document.querySelector(<span class="code-string">'.description'</span>);<br>
+                        <span class="code-keyword">const</span> listItems = document.querySelectorAll(<span class="code-string">'#myList li'</span>);<br>
+                        <span class="code-keyword">const</span> changeButton = document.getElementById(<span class="code-string">'changeTitle'</span>);<br><br>
+                        
+                        <span class="code-comment">// Cambiar contenido</span><br>
+                        changeButton.addEventListener(<span class="code-string">'click'</span>, () => {<br>
+                        &nbsp;&nbsp;title.textContent = <span class="code-string">'¡Título Cambiado!'</span>;<br>
+                        &nbsp;&nbsp;description.textContent = <span class="code-string">'El contenido ha sido modificado.'</span>;<br>
+                        });<br><br>
+                        
+                        <span class="code-comment">// Cambiar estilos de lista</span><br>
+                        listItems.forEach(item => {<br>
+                        &nbsp;&nbsp;item.style.color = <span class="code-string">'blue'</span>;<br>
+                        });<br><br>
+                        
+                        <span class="code-comment">// Eventos mouseover y mouseout</span><br>
+                        listItems.forEach(item => {<br>
+                        &nbsp;&nbsp;item.addEventListener(<span class="code-string">'mouseover'</span>, () => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;item.style.backgroundColor = <span class="code-string">'lightgray'</span>;<br>
+                        &nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;item.addEventListener(<span class="code-string">'mouseout'</span>, () => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;item.style.backgroundColor = <span class="code-string">''</span>;<br>
+                        &nbsp;&nbsp;});<br>
+                        });
+                    </div>
+                    
+                    <div class="interactive-demo">
+                        <h4>Prueba la solución:</h4>
+                        <h1 id="mainTitle">Título Principal</h1>
+                        <p class="description">Este es un párrafo de ejemplo.</p>
+                        <ul id="myList">
+                            <li>Elemento 1</li>
+                            <li>Elemento 2</li>
+                            <li>Elemento 3</li>
+                        </ul>
+                        <button id="changeTitle">Cambiar Título</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>© 2023 - Manipulación del DOM con JavaScript</p>
+        <p>Desarrollado para estudiantes de Programación de Dispositivos Móviles</p>
+    </footer>
+
+    <script>
+        // Ejemplo 2: Manipulación de Contenido y Estilos
+        document.getElementById('changeText').addEventListener('click', () => {
+            document.getElementById('myDiv').textContent = 'Text Changed';
+        });
+        
+        document.getElementById('changeStyle').addEventListener('click', () => {
+            const myDiv = document.getElementById('myDiv');
+            myDiv.style.color = 'red';
+            myDiv.style.fontSize = '24px';
+        });
+        
+        function resetElement() {
+            const myDiv = document.getElementById('myDiv');
+            myDiv.textContent = 'Hello, World!';
+            myDiv.style.color = '';
+            myDiv.style.fontSize = '';
+        }
+        
+        // Ejemplo 3: Eventos del DOM
+        const interactiveDiv = document.getElementById('interactiveDiv');
+        
+        interactiveDiv.addEventListener('click', () => {
+            alert('Div clicked!');
+            interactiveDiv.style.backgroundColor = 'lightblue';
+        });
+        
+        interactiveDiv.addEventListener('mouseover', () => {
+            interactiveDiv.style.backgroundColor = 'yellow';
+        });
+        
+        interactiveDiv.addEventListener('mouseout', () => {
+            interactiveDiv.style.backgroundColor = '';
+        });
+        
+        // Ejemplo 4: Manipulación Completa del DOM
+        document.getElementById('changeContent').addEventListener('click', () => {
+            document.getElementById('title').textContent = 'Content Changed!';
+        });
+        
+        document.getElementById('highlightText').addEventListener('click', () => {
+            const paragraphs = document.querySelectorAll('.text');
+            paragraphs.forEach(p => {
+                p.classList.toggle('highlight');
+            });
+        });
+        
+        // Ejercicio Práctico
+        document.getElementById('changeTitle').addEventListener('click', () => {
+            document.getElementById('mainTitle').textContent = '¡Título Cambiado!';
+            document.querySelector('.description').textContent = 'El contenido ha sido modificado.';
+        });
+        
+        const listItems = document.querySelectorAll('#myList li');
+        listItems.forEach(item => {
+            item.style.color = 'blue';
+            
+            item.addEventListener('mouseover', () => {
+                item.style.backgroundColor = 'lightgray';
+            });
+            
+            item.addEventListener('mouseout', () => {
+                item.style.backgroundColor = '';
+            });
+        });
+        
+        // Funciones para los selectores
+        function selectById() {
+            const element = document.getElementById('test-element');
+            element.style.border = '2px solid red';
+            document.getElementById('selection-result').textContent = 'Seleccionado por ID: ' + element.textContent;
+            
+            // Resetear otros elementos
+            resetSelection();
+        }
+        
+        function selectByClass() {
+            const elements = document.getElementsByClassName('demo-element');
+            for (let i = 0; i < elements.length; i++) {
+                elements[i].style.border = '2px solid blue';
+            }
+            document.getElementById('selection-result').textContent = `Seleccionados por clase: ${elements.length} elementos`;
+            
+            // Resetear otros elementos
+            resetSelection();
+        }
+        
+        function selectByTag() {
+            const elements = document.getElementsByTagName('div');
+            let count = 0;
+            for (let i = 0; i < elements.length; i++) {
+                if (elements[i].className.includes('demo-element') || elements[i].id === 'test-element') {
+                    elements[i].style.border = '2px solid green';
+                    count++;
+                }
+            }
+            document.getElementById('selection-result').textContent = `Seleccionados por etiqueta: ${count} elementos div`;
+            
+            // Resetear otros elementos
+            resetSelection();
+        }
+        
+        function selectWithQuery() {
+            const element = document.querySelector('.demo-element');
+            element.style.border = '2px solid purple';
+            document.getElementById('selection-result').textContent = 'Seleccionado con querySelector: ' + element.textContent;
+            
+            // Resetear otros elementos
+            resetSelection();
+        }
+        
+        function resetSelection() {
+            // Quitar bordes de todos los elementos después de un tiempo
+            setTimeout(() => {
+                const elements = document.querySelectorAll('.demo-element, #test-element');
+                elements.forEach(el => {
+                    el.style.border = '';
+                });
+                document.getElementById('selection-result').textContent = '';
+            }, 2000);
+        }
+        
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+            } else {
+                solution.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

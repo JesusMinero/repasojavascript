@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios de Funciones en JavaScript</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+        }
+        
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        h3 {
+            color: var(--primary);
+            margin: 1.5rem 0 1rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+        
+        .code-comment {
+            color: #75715e;
+        }
+        
+        .code-keyword {
+            color: #f92672;
+        }
+        
+        .code-function {
+            color: #e6db74;
+        }
+        
+        .code-variable {
+            color: #a6e22e;
+        }
+        
+        .code-string {
+            color: #ae81ff;
+        }
+        
+        .example-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .code-example, .output-example {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .output-example {
+            background-color: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .interactive-demo {
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border: 1px solid #ddd;
+        }
+        
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: var(--secondary);
+        }
+        
+        input, select {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .exercise {
+            background-color: #e8f4fc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .exercise h3 {
+            color: var(--accent);
+        }
+        
+        .solution {
+            display: none;
+            margin-top: 1rem;
+        }
+        
+        .toggle-solution {
+            background-color: var(--accent);
+            margin-top: 1rem;
+        }
+        
+        .tab-container {
+            margin: 2rem 0;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .tab-button {
+            padding: 1rem 1.5rem;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .tab-button.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .example-container {
+                flex-direction: column;
+            }
+            
+            .tab-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-button">← Volver al Índice</a>
+        <h1>Ejercicios de Funciones en JavaScript</h1>
+        <p class="subtitle">Funciones tradicionales, flecha, de orden superior y closures</p>
+      
+    </header>
+    
+    <div class="container">
+        <section class="section">
+            <h2>Introducción</h2>
+            <p>Este documento presenta una serie de ejercicios de funciones en JavaScript, cubriendo tanto la declaración de funciones tradicionales como funciones flecha, parámetros, valores de retorno y manejo avanzado de funciones.</p>
+        </section>
+        
+        <section class="section">
+            <h2>Funciones Básicas</h2>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="openTab('tab1')">Ejercicio 1: Suma</button>
+                    <button class="tab-button" onclick="openTab('tab2')">Ejercicio 2: División</button>
+                    <button class="tab-button" onclick="openTab('tab3')">Ejercicio 3: Potencia</button>
+                    <button class="tab-button" onclick="openTab('tab4')">Ejercicio 4: Mayor Número</button>
+                </div>
+                
+                <div id="tab1" class="tab-content active">
+                    <h3>Suma de dos números</h3>
+                    <p>Este ejercicio se centra en la creación de funciones para sumar dos números, utilizando tanto la sintaxis de función tradicional como la de función flecha.</p>
+                    
+                    <div class="example-container">
+                        <div class="code-example">
+                            <h4>Función Tradicional</h4>
+                            <div class="code-block">
+                                <span class="code-keyword">function</span> <span class="code-function">sumar</span>(a, b) {<br>
+                                &nbsp;&nbsp;<span class="code-keyword">return</span> a + b;<br>
+                                }
+                            </div>
+                            
+                            <h4>Función Flecha</h4>
+                            <div class="code-block">
+                                <span class="code-keyword">const</span> sumarFlecha = (a, b) => a + b;
+                            </div>
+                        </div>
+                        
+                        <div class="output-example">
+                            <h4>Resultado:</h4>
+                            <div id="sum-output"></div>
+                            <div class="interactive-demo">
+                                <h4>Prueba tú mismo:</h4>
+                                <div class="demo-controls">
+                                    <input type="number" id="sum-num1" placeholder="Número 1" value="5">
+                                    <input type="number" id="sum-num2" placeholder="Número 2" value="3">
+                                    <button onclick="testSum()">Probar funciones</button>
+                                </div>
+                                <div id="sum-result"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="tab2" class="tab-content">
+                    <h3>División de dos números</h3>
+                    <p>Manejando el caso de división por cero.</p>
+                    
+                    <div class="example-container">
+                        <div class="code-example">
+                            <h4>Función Tradicional</h4>
+                            <div class="code-block">
+                                <span class="code-keyword">function</span> <span class="code-function">dividir</span>(a, b) {<br>
+                                &nbsp;&nbsp;<span class="code-keyword">if</span> (b == <span class="code-variable">0</span>) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">'Error: División por cero'</span>;<br>
+                                &nbsp;&nbsp;}<br>
+                                &nbsp;&nbsp;<span class="code-keyword">return</span> a / b;<br>
+                                }
+                            </div>
+                            
+                            <h4>Función Flecha</h4>
+                            <div class="code-block">
+                                <span class="code-keyword">const</span> dividirFlecha = (a, b) => b == <span class="code-variable">0</span> ? <span class="code-string">'Error: División por cero'</span> : a / b;
+                            </div>
+                        </div>
+                        
+                        <div class="output-example">
+                            <h4>Resultado:</h4>
+                            <div id="divide-output"></div>
+                            <div class="interactive-demo">
+                                <h4>Prueba tú mismo:</h4>
+                                <div class="demo-controls">
+                                    <input type="number" id="divide-num1" placeholder="Dividendo" value="8">
+                                    <input type="number" id="divide-num2" placeholder="Divisor" value="2">
+                                    <button onclick="testDivide()">Probar funciones</button>
+                                </div>
+                                <div id="divide-result"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="tab3" class="tab-content">
+                    <h3>Potencia de un número</h3>
+                    
+                    <div class="example-container">
+                        <div class="code-example">
+                            <h4>Función Tradicional</h4>
+                            <div class="code-block">
+                                <span class="code-keyword">function</span> <span class="code-function">potencia</span>(base, exponente) {<br>
+                                &nbsp;&nbsp;<span class="code-keyword">return</span> Math.pow(base, exponente);<br>
+                                }
+                            </div>
+                            
+                            <h4>Función Flecha</h4>
+                            <div class="code-block">
+                                <span class="code-keyword">const</span> potenciaFlecha = (base, exponente) => Math.pow(base, exponente);
+                            </div>
+                        </div>
+                        
+                        <div class="output-example">
+                            <h4>Resultado:</h4>
+                            <div id="power-output"></div>
+                            <div class="interactive-demo">
+                                <h4>Prueba tú mismo:</h4>
+                                <div class="demo-controls">
+                                    <input type="number" id="power-base" placeholder="Base" value="2">
+                                    <input type="number" id="power-exponent" placeholder="Exponente" value="3">
+                                    <button onclick="testPower()">Probar funciones</button>
+                                </div>
+                                <div id="power-result"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="tab4" class="tab-content">
+                    <h3>Mayor de 2 números</h3>
+                    <p>Crea una función tradicional y una función flecha para calcular el mayor de dos números.</p>
+                    
+                    <div class="example-container">
+                        <div class="code-example">
+                            <h4>Función Tradicional</h4>
+                            <div class="code-block">
+                                <span class="code-keyword">function</span> <span class="code-function">mayor</span>(num1, num2) {<br>
+                                &nbsp;&nbsp;<span class="code-keyword">if</span> (num1 > num2) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> num1;<br>
+                                &nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> num2;<br>
+                                &nbsp;&nbsp;}<br>
+                                }
+                            </div>
+                            
+                            <h4>Función Flecha</h4>
+                            <div class="code-block">
+                                <span class="code-keyword">const</span> mayorFlecha = (num1, num2) => (num1 > num2) ? num1 : num2;
+                            </div>
+                        </div>
+                        
+                        <div class="output-example">
+                            <h4>Resultado:</h4>
+                            <div id="max-output"></div>
+                            <div class="interactive-demo">
+                                <h4>Prueba tú mismo:</h4>
+                                <div class="demo-controls">
+                                    <input type="number" id="max-num1" placeholder="Número 1" value="5">
+                                    <input type="number" id="max-num2" placeholder="Número 2" value="10">
+                                    <button onclick="testMax()">Probar funciones</button>
+                                </div>
+                                <div id="max-result"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Ejercicio Personal</h3>
+                <p>Crea 2 ejemplos personales de función tradicional y función flecha.</p>
+                
+                <div class="interactive-demo">
+                    <h4>Crea tus propias funciones:</h4>
+                    <div class="demo-controls">
+                        <input type="text" id="function-name" placeholder="Nombre de función">
+                        <select id="function-type">
+                            <option value="traditional">Tradicional</option>
+                            <option value="arrow">Flecha</option>
+                        </select>
+                        <textarea id="function-code" placeholder="Código de la función" rows="4" style="width: 100%; padding: 0.8rem; border-radius: 5px; border: 1px solid #ddd;"></textarea>
+                        <button onclick="saveFunction()">Guardar función</button>
+                    </div>
+                    <div id="custom-functions"></div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Funciones de Orden Superior</h2>
+            <p>Las funciones de orden superior en JavaScript son aquellas que <strong>toman otras funciones como argumentos o que devuelven funciones</strong>. Esto permite crear código más flexible, modular y expresivo.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Función que toma otra función como parámetro</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">function</span> <span class="code-function">ejecutarOperacion</span>(a, b, operacion) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> operacion(a, b);<br>
+                        }<br><br>
+                        <span class="code-comment">// Funciones de ejemplo</span><br>
+                        <span class="code-keyword">const</span> sumar = (a, b) => a + b;<br>
+                        <span class="code-keyword">const</span> multiplicar = (a, b) => a * b;<br><br>
+                        <span class="code-comment">// Pruebas</span><br>
+                        document.write(ejecutarOperacion(<span class="code-variable">5</span>, <span class="code-variable">3</span>, sumar)); <span class="code-comment">// 8</span><br>
+                        document.write(ejecutarOperacion(<span class="code-variable">5</span>, <span class="code-variable">3</span>, multiplicar)); <span class="code-comment">// 15</span>
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="higher-order-output"></div>
+                    <div class="interactive-demo">
+                        <h4>Prueba con tus propios valores:</h4>
+                        <div class="demo-controls">
+                            <input type="number" id="ho-num1" placeholder="Número 1" value="5">
+                            <input type="number" id="ho-num2" placeholder="Número 2" value="3">
+                            <select id="ho-operation">
+                                <option value="add">Sumar</option>
+                                <option value="multiply">Multiplicar</option>
+                                <option value="subtract">Restar</option>
+                                <option value="divide">Dividir</option>
+                            </select>
+                            <button onclick="testHigherOrder()">Ejecutar operación</button>
+                        </div>
+                        <div id="ho-result"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Función de orden superior con map</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">function</span> <span class="code-function">aplicarOperacionArray</span>(arr, operacion) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> arr.map(operacion);<br>
+                        }<br><br>
+                        <span class="code-comment">// Función de ejemplo</span><br>
+                        <span class="code-keyword">const</span> duplicar = (x) => x * <span class="code-variable">2</span>;<br><br>
+                        <span class="code-comment">// Pruebas</span><br>
+                        <span class="code-keyword">const</span> numeros = [<span class="code-variable">1</span>, <span class="code-variable">2</span>, <span class="code-variable">3</span>, <span class="code-variable">4</span>];<br>
+                        document.write(aplicarOperacionArray(numeros, duplicar)); <span class="code-comment">// [2, 4, 6, 8]</span>
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="map-output"></div>
+                    <div class="interactive-demo">
+                        <h4>Prueba con diferentes operaciones:</h4>
+                        <div class="demo-controls">
+                            <input type="text" id="array-input" placeholder="Array (ej: 1,2,3,4)" value="1,2,3,4">
+                            <select id="array-operation">
+                                <option value="double">Duplicar</option>
+                                <option value="square">Elevar al cuadrado</option>
+                                <option value="increment">Incrementar en 1</option>
+                            </select>
+                            <button onclick="testArrayOperation()">Aplicar operación</button>
+                        </div>
+                        <div id="array-result"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Closures en JavaScript</h2>
+            <p>Los <strong>closures</strong> son una característica fundamental en muchos lenguajes de programación, incluidos JavaScript. Permiten que una función acceda a su propio ámbito de variables, incluso después de que la función externa haya finalizado su ejecución.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Closure para contar</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">function</span> <span class="code-function">crearContador</span>() {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">let</span> contador = <span class="code-variable">0</span>;<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;contador += <span class="code-variable">1</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> contador;<br>
+                        &nbsp;&nbsp;};<br>
+                        }<br><br>
+                        <span class="code-comment">// Crear una instancia del contador</span><br>
+                        <span class="code-keyword">const</span> contador = crearContador();<br><br>
+                        <span class="code-comment">// Usar el contador</span><br>
+                        document.write(contador()); <span class="code-comment">// 1</span><br>
+                        document.write(contador()); <span class="code-comment">// 2</span><br>
+                        document.write(contador()); <span class="code-comment">// 3</span>
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="closure-output"></div>
+                    <div class="interactive-demo">
+                        <h4>Prueba el contador:</h4>
+                        <div class="demo-controls">
+                            <button onclick="testCounter()">Crear nuevo contador</button>
+                            <button onclick="incrementCounter()">Incrementar contador</button>
+                        </div>
+                        <div id="counter-result">Contador actual: 0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Función que retorna otra función</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">function</span> <span class="code-function">crearSaludo</span>(saludo) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span>(nombre) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">`${saludo}, ${nombre}!`</span>;<br>
+                        &nbsp;&nbsp;};<br>
+                        }<br><br>
+                        <span class="code-comment">// Crear funciones de saludo</span><br>
+                        <span class="code-keyword">const</span> saludarEnEspanol = crearSaludo(<span class="code-string">"Hola"</span>);<br>
+                        <span class="code-keyword">const</span> saludarEnIngles = crearSaludo(<span class="code-string">"Hello"</span>);<br><br>
+                        <span class="code-comment">// Usar las funciones de saludo</span><br>
+                        document.write(saludarEnEspanol(<span class="code-string">"Juan"</span>)); <span class="code-comment">// Hola, Juan!</span><br>
+                        document.write(saludarEnIngles(<span class="code-string">"John"</span>)); <span class="code-comment">// Hello, John!</span>
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="greeting-output"></div>
+                    <div class="interactive-demo">
+                        <h4>Crea tu propio saludo:</h4>
+                        <div class="demo-controls">
+                            <input type="text" id="greeting-text" placeholder="Saludo (ej: Hola)" value="Hola">
+                            <input type="text" id="greeting-name" placeholder="Nombre (ej: Juan)" value="Juan">
+                            <button onclick="testGreeting()">Crear y usar saludo</button>
+                        </div>
+                        <div id="greeting-result"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Patrón Revelador</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> moduloContador = (<span class="code-keyword">function</span>() {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">let</span> contador = <span class="code-variable">0</span>; <span class="code-comment">// Variable privada</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;incrementar: <span class="code-keyword">function</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contador++;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> contador;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;obtenerContador: <span class="code-keyword">function</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> contador;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;};<br>
+                        })();<br><br>
+                        <span class="code-comment">// Usar el módulo</span><br>
+                        document.write(moduloContador.incrementar()); <span class="code-comment">// 1</span><br>
+                        document.write(moduloContador.incrementar()); <span class="code-comment">// 2</span><br>
+                        document.write(moduloContador.obtenerContador()); <span class="code-comment">// 2</span>
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="module-output"></div>
+                    <div class="interactive-demo">
+                        <h4>Prueba el módulo contador:</h4>
+                        <div class="demo-controls">
+                            <button onclick="incrementModule()">Incrementar contador del módulo</button>
+                            <button onclick="getModuleCount()">Obtener contador del módulo</button>
+                        </div>
+                        <div id="module-result">Contador del módulo: 0</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Juego de Adivinar Números</h2>
+            <p>Implementación de un juego de adivinar números usando closures y funciones.</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// Función para generar un número aleatorio dentro de un rango</span><br>
+                <span class="code-keyword">function</span> <span class="code-function">crearGeneradorNumeroAleatorio</span>(min, max) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> Math.floor(Math.random() * (max - min + <span class="code-variable">1</span>)) + min;<br>
+                &nbsp;&nbsp;};<br>
+                }<br><br>
+                <span class="code-comment">// Función principal del juego</span><br>
+                <span class="code-keyword">function</span> <span class="code-function">crearJuegoAdivinarNumero</span>(generadorNumero) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">const</span> numeroAleatorio = generadorNumero();<br>
+                &nbsp;&nbsp;<span class="code-keyword">let</span> intentos = <span class="code-variable">0</span>;<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span>(adivina) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;intentos += <span class="code-variable">1</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (adivina < numeroAleatorio) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">`El número es mayor. Intentos: ${intentos}`</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> <span class="code-keyword">if</span> (adivina > numeroAleatorio) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">`El número es menor. Intentos: ${intentos}`</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">`¡Felicidades! Adivinaste el número en ${intentos} intentos.`</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;};<br>
+                }
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Juega a adivinar el número:</h3>
+                <div class="demo-controls">
+                    <input type="number" id="min-range" placeholder="Mínimo" value="1">
+                    <input type="number" id="max-range" placeholder="Máximo" value="100">
+                    <button onclick="startGame()">Iniciar juego</button>
+                </div>
+                <div id="game-status">Juego no iniciado</div>
+                <div class="demo-controls" id="game-controls" style="display: none;">
+                    <input type="number" id="guess-number" placeholder="Tu guess">
+                    <button onclick="makeGuess()">Adivinar</button>
+                </div>
+                <div id="game-result"></div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Ejercicios Finales</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Operaciones con funciones de orden superior</h3>
+                <p>Crea una función que utilice map, filter y reduce para procesar un arreglo de números:</p>
+                <ul>
+                    <li>Duplicar los números pares (map)</li>
+                    <li>Filtrar los números mayores a 10 (filter)</li>
+                    <li>Sumar los números resultantes (reduce)</li>
+                </ul>
+                
+                <div class="code-block">
+                    <span class="code-keyword">const</span> numeros = [<span class="code-variable">5</span>, <span class="code-variable">12</span>, <span class="code-variable">8</span>, <span class="code-variable">21</span>, <span class="code-variable">4</span>, <span class="code-variable">15</span>];<br><br>
+                    <span class="code-keyword">function</span> <span class="code-function">procesarNumeros</span>(arr) {<br>
+                    &nbsp;&nbsp;<span class="code-comment">// Tu código aquí</span><br>
+                    }<br><br>
+                    console.log(procesarNumeros(numeros)); <span class="code-comment">// Resultado esperado: 52</span>
+                </div>
+                
+                <button class="toggle-solution" onclick="toggleSolution('solution1')">Ver Solución</button>
+                
+                <div id="solution1" class="solution">
+                    <div class="code-block">
+                        <span class="code-keyword">function</span> <span class="code-function">procesarNumeros</span>(arr) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> arr<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.map(num => num % <span class="code-variable">2</span> === <span class="code-variable">0</span> ? num * <span class="code-variable">2</span> : num)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.filter(num => num > <span class="code-variable">10</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.reduce((total, num) => total + num, <span class="code-variable">0</span>);<br>
+                        }
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Ejercicio 2: Closures y funciones de orden superior</h3>
+                <p>Investiga o crea un ejercicio donde apliques closures y funciones de orden superior.</p>
+                
+                <div class="interactive-demo">
+                    <h4>Crea tu propio ejercicio:</h4>
+                    <textarea id="custom-exercise" placeholder="Describe tu ejercicio aquí..." rows="4" style="width: 100%; padding: 0.8rem; border-radius: 5px; border: 1px solid #ddd;"></textarea>
+                    <button onclick="saveExercise()">Guardar ejercicio</button>
+                    <div id="saved-exercises"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>© 2023 - Ejercicios de Funciones en JavaScript</p>
+        <p>Desarrollado para estudiantes de Programación de Dispositivos Móviles</p>
+    </footer>
+
+    <script>
+        // Variables globales para los ejemplos interactivos
+        let currentCounter = null;
+        let currentGame = null;
+        let moduleCounter = 0;
+        let customFunctions = [];
+        let customExercises = [];
+        
+        // Ejecutar ejemplos al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ejercicio 1: Suma
+            document.getElementById('sum-output').innerHTML = `
+                sumar(5, 3) = ${sumar(5, 3)}<br>
+                sumarFlecha(5, 3) = ${sumarFlecha(5, 3)}
+            `;
+            
+            // Ejercicio 2: División
+            document.getElementById('divide-output').innerHTML = `
+                dividir(8, 2) = ${dividir(8, 2)}<br>
+                dividir(8, 0) = ${dividir(8, 0)}<br>
+                dividirFlecha(8, 2) = ${dividirFlecha(8, 2)}<br>
+                dividirFlecha(8, 0) = ${dividirFlecha(8, 0)}
+            `;
+            
+            // Ejercicio 3: Potencia
+            document.getElementById('power-output').innerHTML = `
+                potencia(2, 3) = ${potencia(2, 3)}<br>
+                potenciaFlecha(2, 3) = ${potenciaFlecha(2, 3)}
+            `;
+            
+            // Ejercicio 4: Mayor número
+            document.getElementById('max-output').innerHTML = `
+                mayor(5, 10) = ${mayor(5, 10)}<br>
+                mayorFlecha(5, 10) = ${mayorFlecha(5, 10)}
+            `;
+            
+            // Funciones de orden superior
+            const sumar = (a, b) => a + b;
+            const multiplicar = (a, b) => a * b;
+            document.getElementById('higher-order-output').innerHTML = `
+                ejecutarOperacion(5, 3, sumar) = ${ejecutarOperacion(5, 3, sumar)}<br>
+                ejecutarOperacion(5, 3, multiplicar) = ${ejecutarOperacion(5, 3, multiplicar)}
+            `;
+            
+            // Función con map
+            const duplicar = (x) => x * 2;
+            const numeros = [1, 2, 3, 4];
+            document.getElementById('map-output').innerHTML = `
+                aplicarOperacionArray([1, 2, 3, 4], duplicar) = [${aplicarOperacionArray(numeros, duplicar)}]
+            `;
+            
+            // Closures
+            const contador = crearContador();
+            document.getElementById('closure-output').innerHTML = `
+                contador() = ${contador()}<br>
+                contador() = ${contador()}<br>
+                contador() = ${contador()}
+            `;
+            
+            // Función que retorna otra función
+            const saludarEnEspanol = crearSaludo("Hola");
+            const saludarEnIngles = crearSaludo("Hello");
+            document.getElementById('greeting-output').innerHTML = `
+                saludarEnEspanol("Juan") = "${saludarEnEspanol("Juan")}"<br>
+                saludarEnIngles("John") = "${saludarEnIngles("John")}"
+            `;
+            
+            // Patrón revelador
+            document.getElementById('module-output').innerHTML = `
+                moduloContador.incrementar() = ${moduloContador.incrementar()}<br>
+                moduloContador.incrementar() = ${moduloContador.incrementar()}<br>
+                moduloContador.obtenerContador() = ${moduloContador.obtenerContador()}
+            `;
+        });
+        
+        // Funciones básicas
+        function sumar(a, b) {
+            return a + b;
+        }
+        
+        const sumarFlecha = (a, b) => a + b;
+        
+        function dividir(a, b) {
+            if (b == 0) {
+                return 'Error: División por cero';
+            }
+            return a / b;
+        }
+        
+        const dividirFlecha = (a, b) => b == 0 ? 'Error: División por cero' : a / b;
+        
+        function potencia(base, exponente) {
+            return Math.pow(base, exponente);
+        }
+        
+        const potenciaFlecha = (base, exponente) => Math.pow(base, exponente);
+        
+        function mayor(num1, num2) {
+            if (num1 > num2) {
+                return num1;
+            } else {
+                return num2;
+            }
+        }
+        
+        const mayorFlecha = (num1, num2) => (num1 > num2) ? num1 : num2;
+        
+        // Funciones de orden superior
+        function ejecutarOperacion(a, b, operacion) {
+            return operacion(a, b);
+        }
+        
+        function aplicarOperacionArray(arr, operacion) {
+            return arr.map(operacion);
+        }
+        
+        // Closures
+        function crearContador() {
+            let contador = 0;
+            return function() {
+                contador += 1;
+                return contador;
+            };
+        }
+        
+        function crearSaludo(saludo) {
+            return function(nombre) {
+                return `${saludo}, ${nombre}!`;
+            };
+        }
+        
+        // Patrón revelador
+        const moduloContador = (function() {
+            let contador = 0; // Variable privada
+            return {
+                incrementar: function() {
+                    contador++;
+                    return contador;
+                },
+                obtenerContador: function() {
+                    return contador;
+                }
+            };
+        })();
+        
+        // Funciones para las pestañas
+        function openTab(tabId) {
+            // Ocultar todos los contenidos de pestañas
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Desactivar todos los botones de pestañas
+            const tabButtons = document.getElementsByClassName('tab-button');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+            
+            // Activar la pestaña seleccionada
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+        
+        // Funciones para los ejemplos interactivos
+        function testSum() {
+            const num1 = parseInt(document.getElementById('sum-num1').value);
+            const num2 = parseInt(document.getElementById('sum-num2').value);
+            document.getElementById('sum-result').innerHTML = `
+                sumar(${num1}, ${num2}) = ${sumar(num1, num2)}<br>
+                sumarFlecha(${num1}, ${num2}) = ${sumarFlecha(num1, num2)}
+            `;
+        }
+        
+        function testDivide() {
+            const num1 = parseInt(document.getElementById('divide-num1').value);
+            const num2 = parseInt(document.getElementById('divide-num2').value);
+            document.getElementById('divide-result').innerHTML = `
+                dividir(${num1}, ${num2}) = ${dividir(num1, num2)}<br>
+                dividirFlecha(${num1}, ${num2}) = ${dividirFlecha(num1, num2)}
+            `;
+        }
+        
+        function testPower() {
+            const base = parseInt(document.getElementById('power-base').value);
+            const exponent = parseInt(document.getElementById('power-exponent').value);
+            document.getElementById('power-result').innerHTML = `
+                potencia(${base}, ${exponent}) = ${potencia(base, exponent)}<br>
+                potenciaFlecha(${base}, ${exponent}) = ${potenciaFlecha(base, exponent)}
+            `;
+        }
+        
+        function testMax() {
+            const num1 = parseInt(document.getElementById('max-num1').value);
+            const num2 = parseInt(document.getElementById('max-num2').value);
+            document.getElementById('max-result').innerHTML = `
+                mayor(${num1}, ${num2}) = ${mayor(num1, num2)}<br>
+                mayorFlecha(${num1}, ${num2}) = ${mayorFlecha(num1, num2)}
+            `;
+        }
+        
+        function testHigherOrder() {
+            const num1 = parseInt(document.getElementById('ho-num1').value);
+            const num2 = parseInt(document.getElementById('ho-num2').value);
+            const operation = document.getElementById('ho-operation').value;
+            
+            let operationFunction;
+            let operationName;
+            
+            switch(operation) {
+                case 'add':
+                    operationFunction = (a, b) => a + b;
+                    operationName = 'Suma';
+                    break;
+                case 'subtract':
+                    operationFunction = (a, b) => a - b;
+                    operationName = 'Resta';
+                    break;
+                case 'multiply':
+                    operationFunction = (a, b) => a * b;
+                    operationName = 'Multiplicación';
+                    break;
+                case 'divide':
+                    operationFunction = (a, b) => b !== 0 ? a / b : 'Error: División por cero';
+                    operationName = 'División';
+                    break;
+            }
+            
+            const result = ejecutarOperacion(num1, num2, operationFunction);
+            document.getElementById('ho-result').innerHTML = `
+                ${operationName} de ${num1} y ${num2} = ${result}
+            `;
+        }
+        
+        function testArrayOperation() {
+            const arrayInput = document.getElementById('array-input').value;
+            const operation = document.getElementById('array-operation').value;
+            
+            const array = arrayInput.split(',').map(num => parseInt(num.trim()));
+            
+            let operationFunction;
+            let operationName;
+            
+            switch(operation) {
+                case 'double':
+                    operationFunction = x => x * 2;
+                    operationName = 'Duplicar';
+                    break;
+                case 'square':
+                    operationFunction = x => x * x;
+                    operationName = 'Elevar al cuadrado';
+                    break;
+                case 'increment':
+                    operationFunction = x => x + 1;
+                    operationName = 'Incrementar en 1';
+                    break;
+            }
+            
+            const result = aplicarOperacionArray(array, operationFunction);
+            document.getElementById('array-result').innerHTML = `
+                Array original: [${array}]<br>
+                ${operationName}: [${result}]
+            `;
+        }
+        
+        function testCounter() {
+            currentCounter = crearContador();
+            document.getElementById('counter-result').innerHTML = 'Contador actual: 0 (nuevo contador creado)';
+        }
+        
+        function incrementCounter() {
+            if (currentCounter) {
+                const count = currentCounter();
+                document.getElementById('counter-result').innerHTML = `Contador actual: ${count}`;
+            } else {
+                document.getElementById('counter-result').innerHTML = 'Primero crea un contador';
+            }
+        }
+        
+        function testGreeting() {
+            const greeting = document.getElementById('greeting-text').value;
+            const name = document.getElementById('greeting-name').value;
+            
+            const greetingFunction = crearSaludo(greeting);
+            const result = greetingFunction(name);
+            
+            document.getElementById('greeting-result').innerHTML = `Resultado: ${result}`;
+        }
+        
+        function incrementModule() {
+            const count = moduloContador.incrementar();
+            document.getElementById('module-result').innerHTML = `Contador del módulo: ${count}`;
+        }
+        
+        function getModuleCount() {
+            const count = moduloContador.obtenerContador();
+            document.getElementById('module-result').innerHTML = `Contador del módulo: ${count}`;
+        }
+        
+        function startGame() {
+            const min = parseInt(document.getElementById('min-range').value);
+            const max = parseInt(document.getElementById('max-range').value);
+            
+            const generadorNumero = crearGeneradorNumeroAleatorio(min, max);
+            currentGame = crearJuegoAdivinarNumero(generadorNumero);
+            
+            document.getElementById('game-status').innerHTML = `Juego iniciado. Adivina un número entre ${min} y ${max}.`;
+            document.getElementById('game-controls').style.display = 'flex';
+            document.getElementById('game-result').innerHTML = '';
+        }
+        
+        function makeGuess() {
+            if (!currentGame) {
+                document.getElementById('game-result').innerHTML = 'Primero inicia el juego';
+                return;
+            }
+            
+            const guess = parseInt(document.getElementById('guess-number').value);
+            if (isNaN(guess)) {
+                document.getElementById('game-result').innerHTML = 'Por favor ingresa un número válido';
+                return;
+            }
+            
+            const result = currentGame(guess);
+            document.getElementById('game-result').innerHTML = result;
+            
+            if (result.includes('Felicidades')) {
+                document.getElementById('game-controls').style.display = 'none';
+            }
+        }
+        
+        function crearGeneradorNumeroAleatorio(min, max) {
+            return function() {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            };
+        }
+        
+        function crearJuegoAdivinarNumero(generadorNumero) {
+            const numeroAleatorio = generadorNumero();
+            let intentos = 0;
+            return function(adivina) {
+                intentos += 1;
+                if (adivina < numeroAleatorio) {
+                    return `El número es mayor. Intentos: ${intentos}`;
+                } else if (adivina > numeroAleatorio) {
+                    return `El número es menor. Intentos: ${intentos}`;
+                } else {
+                    return `¡Felicidades! Adivinaste el número en ${intentos} intentos.`;
+                }
+            };
+        }
+        
+        function saveFunction() {
+            const name = document.getElementById('function-name').value;
+            const type = document.getElementById('function-type').value;
+            const code = document.getElementById('function-code').value;
+            
+            if (!name || !code) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+            
+            customFunctions.push({ name, type, code });
+            updateCustomFunctionsDisplay();
+            
+            // Limpiar campos
+            document.getElementById('function-name').value = '';
+            document.getElementById('function-code').value = '';
+        }
+        
+        function updateCustomFunctionsDisplay() {
+            const container = document.getElementById('custom-functions');
+            container.innerHTML = '<h4>Tus funciones personalizadas:</h4>';
+            
+            customFunctions.forEach((func, index) => {
+                const funcElement = document.createElement('div');
+                funcElement.className = 'code-block';
+                funcElement.innerHTML = `
+                    <strong>${func.name}</strong> (${func.type === 'traditional' ? 'Tradicional' : 'Flecha'}):<br>
+                    ${func.code}
+                `;
+                container.appendChild(funcElement);
+            });
+        }
+        
+        function saveExercise() {
+            const exercise = document.getElementById('custom-exercise').value;
+            
+            if (!exercise) {
+                alert('Por favor describe tu ejercicio');
+                return;
+            }
+            
+            customExercises.push(exercise);
+            updateCustomExercisesDisplay();
+            
+            // Limpiar campo
+            document.getElementById('custom-exercise').value = '';
+        }
+        
+        function updateCustomExercisesDisplay() {
+            const container = document.getElementById('saved-exercises');
+            container.innerHTML = '<h4>Tus ejercicios personalizados:</h4>';
+            
+            customExercises.forEach((exercise, index) => {
+                const exerciseElement = document.createElement('div');
+                exerciseElement.className = 'exercise';
+                exerciseElement.innerHTML = exercise;
+                container.appendChild(exerciseElement);
+            });
+        }
+        
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+            } else {
+                solution.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

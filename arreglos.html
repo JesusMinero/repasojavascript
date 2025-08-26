@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manejo de Arreglos y Objetos en JavaScript</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+        }
+        
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        h3 {
+            color: var(--primary);
+            margin: 1.5rem 0 1rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+        
+        .code-comment {
+            color: #75715e;
+        }
+        
+        .code-keyword {
+            color: #f92672;
+        }
+        
+        .code-function {
+            color: #e6db74;
+        }
+        
+        .code-variable {
+            color: #a6e22e;
+        }
+        
+        .code-string {
+            color: #ae81ff;
+        }
+        
+        .example-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .code-example, .output-example {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .output-example {
+            background-color: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .interactive-demo {
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border: 1px solid #ddd;
+        }
+        
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: var(--secondary);
+        }
+        
+        input, select {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .exercise {
+            background-color: #e8f4fc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .exercise h3 {
+            color: var(--accent);
+        }
+        
+        .solution {
+            display: none;
+            margin-top: 1rem;
+        }
+        
+        .toggle-solution {
+            background-color: var(--accent);
+            margin-top: 1rem;
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .example-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-button">← Volver al Índice</a>
+        <h1>Manejo de Arreglos y Objetos en JavaScript</h1>
+        <p class="subtitle">Técnicas avanzadas para el desarrollo con React Native</p>
+    </header>
+    
+    <div class="container">
+        <section class="section">
+            <h2>Introducción</h2>
+            <p>Este documento explora técnicas avanzadas para manejar arreglos y objetos en JavaScript, incluyendo iteración, métodos de arreglos y manipulación de objetos. Se presentan ejemplos prácticos y ejercicios resueltos para fortalecer las habilidades necesarias en el desarrollo con React Native.</p>
+        </section>
+        
+        <section class="section">
+            <h2>Iteración sobre Arreglos</h2>
+            <p>Una técnica fundamental en el manejo de arreglos es la iteración. Veamos diferentes formas de iterar sobre arreglos:</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Bucle for tradicional</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> frutas = [<span class="code-string">"manzana"</span>, <span class="code-string">"banana"</span>, <span class="code-string">"naranja"</span>, <span class="code-string">"uva"</span>];<br>
+                        <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-variable">0</span>; i < frutas.length; i++) {<br>
+                        &nbsp;&nbsp;console.log(frutas[i]);<br>
+                        }<br>
+                        <span class="code-comment">// Salida: manzana, banana, naranja, uva</span>
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="for-loop-output"></div>
+                </div>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Prueba tú mismo:</h3>
+                <p>Agrega elementos al arreglo y luego itera sobre ellos:</p>
+                <div class="demo-controls">
+                    <input type="text" id="new-fruit" placeholder="Escribe una fruta">
+                    <button onclick="addFruit()">Agregar fruta</button>
+                    <button onclick="iterateFruits()">Iterar frutas</button>
+                </div>
+                <div id="interactive-output"></div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Métodos de Arreglos</h2>
+            
+            <h3>Método map()</h3>
+            <p>El método map crea un nuevo arreglo con los resultados de llamar a una función para cada elemento.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> numeros = [<span class="code-variable">1</span>, <span class="code-variable">2</span>, <span class="code-variable">3</span>, <span class="code-variable">4</span>, <span class="code-variable">5</span>];<br>
+                        <span class="code-keyword">const</span> numerosDuplicados = numeros.map(<span class="code-keyword">num</span> => <span class="code-keyword">num</span> * <span class="code-variable">2</span>);<br>
+                        console.log(numerosDuplicados); <span class="code-comment">// [2, 4, 6, 8, 10]</span>
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="map-output"></div>
+                </div>
+            </div>
+            
+            <h3>Método filter()</h3>
+            <p>Filter crea un nuevo arreglo con todos los elementos que pasan la prueba implementada por la función proporcionada.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> numeros = [<span class="code-variable">1</span>, <span class="code-variable">2</span>, <span class="code-variable">3</span>, <span class="code-variable">4</span>, <span class="code-variable">5</span>];<br>
+                        <span class="code-keyword">const</span> numerosFiltrados = numeros.filter(<span class="code-keyword">num</span> => <span class="code-keyword">num</span> > <span class="code-variable">2</span>);<br>
+                        console.log(numerosFiltrados); <span class="code-comment">// [3, 4, 5]</span>
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="filter-output"></div>
+                </div>
+            </div>
+            
+            <h3>Método reduce()</h3>
+            <p>Reduce ejecuta una función reductora sobre cada elemento de un array, devolviendo como resultado un único valor.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> numeros = [<span class="code-variable">1</span>, <span class="code-variable">2</span>, <span class="code-variable">3</span>, <span class="code-variable">4</span>, <span class="code-variable">5</span>];<br>
+                        <span class="code-keyword">const</span> suma = numeros.reduce((<span class="code-keyword">total</span>, <span class="code-keyword">num</span>) => <span class="code-keyword">total</span> + <span class="code-keyword">num</span>, <span class="code-variable">0</span>);<br>
+                        console.log(suma); <span class="code-comment">// 15</span>
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="reduce-output"></div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Ejercicio: Encontrar el Mayor Número</h3>
+                <p>Implementa una función que encuentre el mayor número en un arreglo usando reduce().</p>
+                
+                <div class="code-block">
+                    <span class="code-keyword">function</span> <span class="code-function">encontrarMayor</span>(arr) {<br>
+                    &nbsp;&nbsp;<span class="code-comment">// Tu código aquí</span><br>
+                    }<br><br>
+                    <span class="code-keyword">const</span> numeros = [<span class="code-variable">10</span>, <span class="code-variable">5</span>, <span class="code-variable">8</span>, <span class="code-variable">20</span>, <span class="code-variable">15</span>];<br>
+                    console.log(encontrarMayor(numeros)); <span class="code-comment">// 20</span>
+                </div>
+                
+                <button class="toggle-solution" onclick="toggleSolution('solution1')">Ver Solución</button>
+                
+                <div id="solution1" class="solution">
+                    <div class="code-block">
+                        <span class="code-keyword">function</span> <span class="code-function">encontrarMayor</span>(arr) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> arr.reduce((<span class="code-keyword">max</span>, <span class="code-keyword">num</span>) => (<span class="code-keyword">num</span> > <span class="code-keyword">max</span> ? <span class="code-keyword">num</span> : <span class="code-keyword">max</span>), arr[<span class="code-variable">0</span>]);<br>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Objetos en JavaScript</h2>
+            
+            <h3>Creación y Acceso a Propiedades</h3>
+            <p>Los objetos en JavaScript son estructuras que permiten almacenar datos en pares clave-valor.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> persona = {<br>
+                        &nbsp;&nbsp;nombre: <span class="code-string">"Juan"</span>,<br>
+                        &nbsp;&nbsp;edad: <span class="code-variable">30</span>,<br>
+                        &nbsp;&nbsp;ciudad: <span class="code-string">"Madrid"</span><br>
+                        };<br><br>
+                        <span class="code-comment">// Notación de punto</span><br>
+                        console.log(persona.nombre); <span class="code-comment">// Juan</span><br><br>
+                        <span class="code-comment">// Notación de corchetes</span><br>
+                        console.log(persona[<span class="code-string">"edad"</span>]); <span class="code-comment">// 30</span>
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="object-output"></div>
+                </div>
+            </div>
+            
+            <h3>Iteración sobre Propiedades</h3>
+            <p>Para recorrer las propiedades de un objeto, podemos usar un bucle for...in:</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> libro = {<br>
+                        &nbsp;&nbsp;titulo: <span class="code-string">"El principito"</span>,<br>
+                        &nbsp;&nbsp;autor: <span class="code-string">"Antoine de Saint-Exupéry"</span>,<br>
+                        &nbsp;&nbsp;año: <span class="code-variable">1943</span><br>
+                        };<br><br>
+                        <span class="code-keyword">for</span> (<span class="code-keyword">let</span> propiedad in libro) {<br>
+                        &nbsp;&nbsp;console.log(`${propiedad}: ${libro[propiedad]}`);<br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="for-in-output"></div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Ejercicio: Contar Propiedades de un Objeto</h3>
+                <p>Escribe una función que tome un objeto y devuelva el número de propiedades que tiene.</p>
+                
+                <div class="code-block">
+                    <span class="code-keyword">function</span> <span class="code-function">contarPropiedades</span>(obj) {<br>
+                    &nbsp;&nbsp;<span class="code-comment">// Tu código aquí</span><br>
+                    }<br><br>
+                    <span class="code-keyword">const</span> coche = {<br>
+                    &nbsp;&nbsp;marca: <span class="code-string">"Toyota"</span>,<br>
+                    &nbsp;&nbsp;modelo: <span class="code-string">"Corolla"</span>,<br>
+                    &nbsp;&nbsp;año: <span class="code-variable">2020</span><br>
+                    };<br>
+                    console.log(contarPropiedades(coche)); <span class="code-comment">// 3</span>
+                </div>
+                
+                <button class="toggle-solution" onclick="toggleSolution('solution2')">Ver Solución</button>
+                
+                <div id="solution2" class="solution">
+                    <div class="code-block">
+                        <span class="code-keyword">function</span> <span class="code-function">contarPropiedades</span>(obj) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> Object.keys(obj).length;<br>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Transformación de Arreglos de Objetos</h2>
+            
+            <h3>Extraer una propiedad específica</h3>
+            <p>Podemos usar map() para extraer una propiedad específica de cada objeto en un arreglo.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> usuarios = [<br>
+                        &nbsp;&nbsp;{nombre: <span class="code-string">"Ana"</span>, edad: <span class="code-variable">25</span>},<br>
+                        &nbsp;&nbsp;{nombre: <span class="code-string">"Luis"</span>, edad: <span class="code-variable">30</span>},<br>
+                        &nbsp;&nbsp;{nombre: <span class="code-string">"María"</span>, edad: <span class="code-variable">28</span>}<br>
+                        ];<br><br>
+                        <span class="code-keyword">function</span> <span class="code-function">obtenerNombres</span>(arr) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> arr.map(usuario => usuario.nombre);<br>
+                        }<br><br>
+                        console.log(obtenerNombres(usuarios));<br>
+                        <span class="code-comment">// ["Ana", "Luis", "María"]</span>
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="transform-output"></div>
+                </div>
+            </div>
+            
+            <h3>Filtrado de Arreglos de Objetos</h3>
+            <p>Podemos usar filter() para crear un nuevo arreglo con objetos que cumplan cierta condición.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <div class="code-block">
+                        <span class="code-keyword">function</span> <span class="code-function">filtrarUsuarios</span>(arr) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> arr.filter(usuario => usuario.edad > <span class="code-variable">27</span>);<br>
+                        }<br><br>
+                        console.log(filtrarUsuarios(usuarios));<br>
+                        <span class="code-comment">// [{ nombre: "Luis", edad: 30 }, { nombre: "María", edad: 28 }]</span>
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="filter-objects-output"></div>
+                </div>
+            </div>
+            
+            <h3>Agrupación por Propiedad</h3>
+            <p>Podemos usar reduce() para agrupar objetos en un arreglo por una propiedad específica.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <div class="code-block">
+                        <span class="code-keyword">function</span> <span class="code-function">agruparPorCategoria</span>(arr) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> arr.reduce((grupo, producto) => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> categoria = producto.categoria;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (!grupo[categoria]) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grupo[categoria] = [];<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;grupo[categoria].push(producto);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> grupo;<br>
+                        &nbsp;&nbsp;}, {});<br>
+                        }<br><br>
+                        <span class="code-keyword">const</span> productos = [<br>
+                        &nbsp;&nbsp;{nombre: <span class="code-string">"camiseta"</span>, categoria: <span class="code-string">"ropa"</span>},<br>
+                        &nbsp;&nbsp;{nombre: <span class="code-string">"pantalón"</span>, categoria: <span class="code-string">"ropa"</span>},<br>
+                        &nbsp;&nbsp;{nombre: <span class="code-string">"zapatos"</span>, categoria: <span class="code-string">"calzado"</span>},<br>
+                        &nbsp;&nbsp;{nombre: <span class="code-string">"sandalias"</span>, categoria: <span class="code-string">"calzado"</span>}<br>
+                        ];<br><br>
+                        console.log(agruparPorCategoria(productos));
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Resultado:</h3>
+                    <div id="group-output"></div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Operaciones con Arreglos</h3>
+                <p>Investiga o crea una función que utilice map, filter y reduce para procesar un arreglo de números:</p>
+                <ul>
+                    <li>Duplicar los números pares (map)</li>
+                    <li>Filtrar los números mayores a 10 (filter)</li>
+                    <li>Sumar los números resultantes (reduce)</li>
+                </ul>
+                
+                <div class="code-block">
+                    <span class="code-keyword">const</span> numeros = [<span class="code-variable">5</span>, <span class="code-variable">12</span>, <span class="code-variable">8</span>, <span class="code-variable">21</span>, <span class="code-variable">4</span>, <span class="code-variable">15</span>];<br><br>
+                    <span class="code-keyword">function</span> <span class="code-function">procesarNumeros</span>(arr) {<br>
+                    &nbsp;&nbsp;<span class="code-comment">// Tu código aquí</span><br>
+                    }<br><br>
+                    console.log(procesarNumeros(numeros)); <span class="code-comment">// Resultado esperado: 52</span>
+                </div>
+                
+                <button class="toggle-solution" onclick="toggleSolution('solution3')">Ver Solución</button>
+                
+                <div id="solution3" class="solution">
+                    <div class="code-block">
+                        <span class="code-keyword">function</span> <span class="code-function">procesarNumeros</span>(arr) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> arr<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.map(num => num % <span class="code-variable">2</span> === <span class="code-variable">0</span> ? num * <span class="code-variable">2</span> : num)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.filter(num => num > <span class="code-variable">10</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.reduce((total, num) => total + num, <span class="code-variable">0</span>);<br>
+                        }
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Ejercicio 2: Manipulación de Objetos</h3>
+                <p>Investiga o crea una función que combine las propiedades de dos objetos. Si hay propiedades con el mismo nombre, usa el valor del segundo objeto.</p>
+                
+                <div class="code-block">
+                    <span class="code-keyword">const</span> obj1 = {<br>
+                    &nbsp;&nbsp;nombre: <span class="code-string">"Juan"</span>,<br>
+                    &nbsp;&nbsp;edad: <span class="code-variable">30</span>,<br>
+                    &nbsp;&nbsp;ciudad: <span class="code-string">"Madrid"</span><br>
+                    };<br><br>
+                    <span class="code-keyword">const</span> obj2 = {<br>
+                    &nbsp;&nbsp;edad: <span class="code-variable">35</span>,<br>
+                    &nbsp;&nbsp;profesion: <span class="code-string">"Ingeniero"</span>,<br>
+                    &nbsp;&nbsp;pais: <span class="code-string">"España"</span><br>
+                    };<br><br>
+                    <span class="code-keyword">function</span> <span class="code-function">combinarObjetos</span>(objeto1, objeto2) {<br>
+                    &nbsp;&nbsp;<span class="code-comment">// Tu código aquí</span><br>
+                    }<br><br>
+                    console.log(combinarObjetos(obj1, obj2));<br>
+                    <span class="code-comment">// { nombre: "Juan", edad: 35, ciudad: "Madrid", profesion: "Ingeniero", pais: "España" }</span>
+                </div>
+                
+                <button class="toggle-solution" onclick="toggleSolution('solution4')">Ver Solución</button>
+                
+                <div id="solution4" class="solution">
+                    <div class="code-block">
+                        <span class="code-keyword">function</span> <span class="code-function">combinarObjetos</span>(objeto1, objeto2) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> { ...objeto1, ...objeto2 };<br>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>© 2023 - Manejo de Arreglos y Objetos en JavaScript</p>
+        <p>Desarrollado para estudiantes de React Native</p>
+    </footer>
+
+    <script>
+        // Ejecutar ejemplos al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Iteración con for
+            const frutas = ["manzana", "banana", "naranja", "uva"];
+            let forOutput = "";
+            for (let i = 0; i < frutas.length; i++) {
+                forOutput += frutas[i] + "<br>";
+            }
+            document.getElementById('for-loop-output').innerHTML = forOutput;
+            
+            // Método map
+            const numeros = [1, 2, 3, 4, 5];
+            const numerosDuplicados = numeros.map(num => num * 2);
+            document.getElementById('map-output').innerHTML = JSON.stringify(numerosDuplicados);
+            
+            // Método filter
+            const numerosFiltrados = numeros.filter(num => num > 2);
+            document.getElementById('filter-output').innerHTML = JSON.stringify(numerosFiltrados);
+            
+            // Método reduce
+            const suma = numeros.reduce((total, num) => total + num, 0);
+            document.getElementById('reduce-output').innerHTML = suma;
+            
+            // Objetos - creación y acceso
+            const persona = {nombre: "Juan", edad: 30, ciudad: "Madrid"};
+            document.getElementById('object-output').innerHTML = `
+                persona.nombre: ${persona.nombre}<br>
+                persona["edad"]: ${persona["edad"]}
+            `;
+            
+            // Iteración for...in
+            const libro = {
+                titulo: "El principito",
+                autor: "Antoine de Saint-Exupéry",
+                año: 1943
+            };
+            
+            let forInOutput = "";
+            for (let propiedad in libro) {
+                forInOutput += `${propiedad}: ${libro[propiedad]}<br>`;
+            }
+            document.getElementById('for-in-output').innerHTML = forInOutput;
+            
+            // Transformación de arreglos de objetos
+            const usuarios = [
+                {nombre: "Ana", edad: 25},
+                {nombre: "Luis", edad: 30},
+                {nombre: "María", edad: 28}
+            ];
+            
+            function obtenerNombres(arr) {
+                return arr.map(usuario => usuario.nombre);
+            }
+            document.getElementById('transform-output').innerHTML = JSON.stringify(obtenerNombres(usuarios));
+            
+            // Filtrado de arreglos de objetos
+            function filtrarUsuarios(arr) {
+                return arr.filter(usuario => usuario.edad > 27);
+            }
+            document.getElementById('filter-objects-output').innerHTML = JSON.stringify(filtrarUsuarios(usuarios));
+            
+            // Agrupación por propiedad
+            const productos = [
+                {nombre: "camiseta", categoria: "ropa"},
+                {nombre: "pantalón", categoria: "ropa"},
+                {nombre: "zapatos", categoria: "calzado"},
+                {nombre: "sandalias", categoria: "calzado"}
+            ];
+            
+            function agruparPorCategoria(arr) {
+                return arr.reduce((grupo, producto) => {
+                    const categoria = producto.categoria;
+                    if (!grupo[categoria]) {
+                        grupo[categoria] = [];
+                    }
+                    grupo[categoria].push(producto);
+                    return grupo;
+                }, {});
+            }
+            document.getElementById('group-output').innerHTML = JSON.stringify(agruparPorCategoria(productos), null, 2);
+        });
+        
+        // Funciones para la demo interactiva
+        let fruitsArray = ["manzana", "banana", "naranja", "uva"];
+        
+        function addFruit() {
+            const newFruitInput = document.getElementById('new-fruit');
+            const newFruit = newFruitInput.value.trim();
+            
+            if (newFruit) {
+                fruitsArray.push(newFruit);
+                newFruitInput.value = '';
+                document.getElementById('interactive-output').innerHTML = 
+                    `<p>Fruta agregada. Arreglo actual: [${fruitsArray.join(', ')}]</p>`;
+            }
+        }
+        
+        function iterateFruits() {
+            let output = "<p>Iterando sobre el arreglo de frutas:</p>";
+            fruitsArray.forEach((fruit, index) => {
+                output += `<p>Índice ${index}: ${fruit}</p>`;
+            });
+            document.getElementById('interactive-output').innerHTML = output;
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+            } else {
+                solution.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

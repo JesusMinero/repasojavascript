@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso de JavaScript - Página Principal</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--secondary);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: var(--secondary);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex: 1;
+        }
+        
+        .welcome-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .welcome-section p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        .card-body h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .card-body p {
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        
+        .card-body ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+            color: #555;
+        }
+        
+        .card-body li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature h3 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>Curso de JavaScript</h1>
+        <p class="subtitle">Domina los fundamentos de programación con JavaScript</p>
+    </header>
+    
+    <div class="container">
+        <section class="welcome-section">
+            <h2>Bienvenido al Curso de JavaScript</h2>
+            <p>JavaScript es el lenguaje de programación más importante para el desarrollo web. Con este curso aprenderás los conceptos fundamentales a través de ejercicios prácticos y ejemplos interactivos.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-code"></i>
+                    <h3>Aprende Haciendo</h3>
+                    <p>Ejercicios prácticos con ejemplos interactivos</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Conceptos Clave</h3>
+                    <p>Domina los fundamentos de JavaScript</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Preparación Profesional</h3>
+                    <p>Preparación para desarrollo con React Native</p>
+                </div>
+            </div>
+        </section>
+        
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Manejo de Arreglos y Objetos</h2>
+                </div>
+                <div class="card-body">
+                    <h3>Técnicas avanzadas para estructuras de datos</h3>
+                    <p>Aprende a manipular arreglos y objetos, las estructuras de datos fundamentales en JavaScript.</p>
+                    
+                    <ul>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Iteración sobre arreglos</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Métodos de arreglos (map, filter, reduce)</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Creación y acceso a propiedades de objetos</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Transformación de arreglos de objetos</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Agrupación por propiedad</li>
+                    </ul>
+                    
+                    <a href="arreglos.html" class="btn btn-block">Acceder al Módulo</a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Ejercicios de Funciones</h2>
+                </div>
+                <div class="card-body">
+                    <h3>Dominando las funciones en JavaScript</h3>
+                    <p>Las funciones son el corazón de JavaScript. Domínalas con estos ejercicios prácticos.</p>
+                    
+                    <ul>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Funciones tradicionales y flecha</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Funciones de orden superior</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Closures y alcance léxico</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Patrón revelador</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Juego de adivinar números</li>
+                    </ul>
+                    
+                    <a href="funciones.html" class="btn btn-block">Acceder al Módulo</a>
+                </div>
+            </div>
+             <div class="card">
+                <div class="card-header">
+                    <h2>Manipulacion del DOM</h2>
+                </div>
+                <div class="card-body">
+                    <h3>DOM</h3>
+                    <p>El DOM (Document Object Model) es una representación en forma de árbol de los elementos de un documento HTML. JavaScript nos permite manipular este DOM para cambiar el contenido, la estructura y el estilo de una página web de forma dinámica. Domínalas con estos ejercicios prácticos.</p>
+                    
+                    <ul>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Tipos de acceso</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Eventos</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Cambiando estilos</li>
+           
+                    </ul>
+                    
+                    <a href="manipulaciondom.html" class="btn btn-block">Acceder al Módulo</a>
+                </div>
+            </div>
+        </div>
+        
+        <section class="welcome-section">
+            <h2>¿Por qué aprender JavaScript?</h2>
+            <p>JavaScript es el lenguaje de programación más utilizado en el mundo, esencial para el desarrollo web frontend y cada vez más importante en el desarrollo backend con Node.js. Además, es la base de frameworks como React Native para el desarrollo de aplicaciones móviles.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fab fa-js-square"></i>
+                    <h3>Lenguaje Universal</h3>
+                    <p>Ejecuta en todos los navegadores y dispositivos</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Aplicaciones Móviles</h3>
+                    <p>Base de React Native para apps nativas</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-briefcase"></i>
+                    <h3>Alta Demanda Laboral</h3>
+                    <p>Uno de los skills más buscados en tech</p>
+                </div>
+            </div>
+            
+            <a href="#" class="btn" onclick="showRecommendations()">Recomendaciones de Estudio</a>
+        </section>
+    </div>
+    
+    <footer>
+        <p>© 2023 - Curso de JavaScript para Desarrollo Móvil</p>
+        <p>Desarrollado por Jesús Minero</p>
+    </footer>
+
+    <script>
+        function showRecommendations() {
+            alert("Recomendaciones de estudio:\n\n1. Comienza con el módulo de Arreglos y Objetos\n2. Continúa con el módulo de Funciones\n3. Practica con todos los ejemplos interactivos\n4. Crea tus propios ejercicios\n5. Repasa regularmente los conceptos aprendidos");
+        }
+        
+        // Detectar si las páginas existen y mostrar advertencia si no
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Simulamos la verificación de existencia de archivos
+                    // En un caso real, podrías usar fetch para verificar si el archivo existe
+                    const href = this.getAttribute('href');
+                    if (href.endsWith('.html')) {
+                        // Aquí podrías agregar una verificación real con fetch
+                        console.log(`Intentando acceder a: ${href}`);
+                        // Para este ejemplo, asumimos que las páginas existen
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
