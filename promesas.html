@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promesas y Asincronía en JavaScript</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .back-button {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+        }
+        
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        h3 {
+            color: var(--primary);
+            margin: 1.5rem 0 1rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+        
+        .code-comment {
+            color: #75715e;
+        }
+        
+        .code-keyword {
+            color: #f92672;
+        }
+        
+        .code-function {
+            color: #e6db74;
+        }
+        
+        .code-variable {
+            color: #a6e22e;
+        }
+        
+        .code-string {
+            color: #ae81ff;
+        }
+        
+        .example-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .code-example, .output-example {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .output-example {
+            background-color: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .interactive-demo {
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border: 1px solid #ddd;
+        }
+        
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: var(--secondary);
+        }
+        
+        input, select {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .exercise {
+            background-color: #e8f4fc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .exercise h3 {
+            color: var(--accent);
+        }
+        
+        .solution {
+            display: none;
+            margin-top: 1rem;
+        }
+        
+        .toggle-solution {
+            background-color: var(--accent);
+            margin-top: 1rem;
+        }
+        
+        .tab-container {
+            margin: 2rem 0;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .tab-button {
+            padding: 1rem 1.5rem;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .tab-button.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .highlight {
+            background-color: yellow;
+        }
+        
+        .dom-element {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .user-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+        
+        .user-item {
+            padding: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-item:last-child {
+            border-bottom: none;
+        }
+        
+        .loading {
+            color: var(--primary);
+            font-style: italic;
+        }
+        
+        .error {
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .example-container {
+                flex-direction: column;
+            }
+            
+            .tab-buttons {
+                flex-direction: column;
+            }
+            
+            .back-button {
+                position: relative;
+                left: 0;
+                top: 0;
+                transform: none;
+                margin-bottom: 1rem;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-button">← Volver al Índice</a>
+        <h1>Promesas y Asincronía en JavaScript</h1>
+        <p class="subtitle">Manejo de operaciones asíncronas con callbacks, promesas y async/await</p>
+    </header>
+    
+    <div class="container">
+        <section class="section">
+            <h2>Introducción a la Asincronía</h2>
+            <p>La asincronía en JavaScript permite ejecutar tareas sin bloquear el hilo principal del programa. Esto es útil cuando necesitas realizar operaciones que pueden llevar tiempo, como acceder a una API o leer archivos.</p>
+            <p>La asincronía se maneja comúnmente con callbacks, promesas y async/await.</p>
+        </section>
+        
+        <section class="section">
+            <h2>Callbacks</h2>
+            <p>Un callback en JavaScript es una función que se pasa como argumento a otra función y se ejecuta después de que se completa la tarea de la función que la recibió.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Código JavaScript</h3>
+                    <div class="code-block">
+                        <span class="code-comment">// Función con callback</span><br>
+                        <span class="code-keyword">function</span> <span class="code-function">sumar</span>(a, b, callback) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">const</span> resultado = a + b;<br>
+                        &nbsp;&nbsp;<span class="code-function">callback</span>(resultado);<br>
+                        }<br><br>
+                        
+                        <span class="code-comment">// Callback que maneja el resultado</span><br>
+                        <span class="code-keyword">function</span> <span class="code-function">mostrarResultado</span>(resultado) {<br>
+                        &nbsp;&nbsp;console.<span class="code-function">log</span>(<span class="code-string">"La suma es:"</span>, resultado);<br>
+                        }<br><br>
+                        
+                        <span class="code-comment">// Llamada a la función con callback</span><br>
+                        <span class="code-function">sumar</span>(5, 10, mostrarResultado);
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Prueba el callback</h3>
+                    <div class="interactive-demo">
+                        <div class="demo-controls">
+                            <input type="number" id="num1" placeholder="Número 1" value="5">
+                            <input type="number" id="num2" placeholder="Número 2" value="10">
+                            <button onclick="ejecutarCallback()">Ejecutar Callback</button>
+                        </div>
+                        <div id="callback-result" class="dom-element">Resultado aparecerá aquí</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Promesas</h2>
+            <p>Una promesa en JavaScript es un objeto que representa la eventual finalización (o falla) de una operación asíncrona y su valor resultante.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Estructura básica de una promesa</h3>
+                    <div class="code-block">
+                        <span class="code-comment">// Crear una nueva promesa</span><br>
+                        <span class="code-keyword">const</span> miPromesa = <span class="code-keyword">new</span> <span class="code-function">Promise</span>((resolve, reject) => {<br>
+                        &nbsp;&nbsp;<span class="code-comment">// Simular una operación asíncrona</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">const</span> exito = <span class="code-keyword">true</span>; <span class="code-comment">// Cambia a false para simular un error</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">if</span> (exito) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-function">resolve</span>(<span class="code-string">"Operación exitosa!"</span>);<br>
+                        &nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-function">reject</span>(<span class="code-string">"Ocurrió un error."</span>);<br>
+                        &nbsp;&nbsp;}<br>
+                        });<br><br>
+                        
+                        <span class="code-comment">// Usar la promesa</span><br>
+                        miPromesa<br>
+                        &nbsp;&nbsp;.<span class="code-function">then</span>((resultado) => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.<span class="code-function">log</span>(resultado);<br>
+                        &nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;.<span class="code-function">catch</span>((error) => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.<span class="code-function">error</span>(error);<br>
+                        &nbsp;&nbsp;});
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Prueba la promesa</h3>
+                    <div class="interactive-demo">
+                        <div class="demo-controls">
+                            <label>
+                                <input type="checkbox" id="promiseSuccess" checked> ¿Éxito?
+                            </label>
+                            <button onclick="ejecutarPromesa()">Ejecutar Promesa</button>
+                        </div>
+                        <div id="promise-result" class="dom-element">Resultado aparecerá aquí</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Async/Await</h2>
+            <p>async y await son palabras clave que permiten escribir código asincrónico de manera más clara y estructurada.</p>
+            
+            <div class="example-container">
+                <div class="code-example">
+                    <h3>Estructura básica de async/await</h3>
+                    <div class="code-block">
+                        <span class="code-comment">// Función asíncrona</span><br>
+                        <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">llamarApiConAsyncAwait</span>() {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">let</span> datos = <span class="code-keyword">await</span> <span class="code-function">llamadaApi</span>();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.<span class="code-function">log</span>(datos);<br>
+                        &nbsp;&nbsp;} <span class="code-keyword">catch</span> (error) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.<span class="code-function">log</span>(error);<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        
+                        <span class="code-comment">// Llamar a la función</span><br>
+                        <span class="code-function">llamarApiConAsyncAwait</span>();
+                    </div>
+                </div>
+                
+                <div class="output-example">
+                    <h3>Prueba async/await</h3>
+                    <div class="interactive-demo">
+                        <div class="demo-controls">
+                            <button onclick="ejecutarAsyncAwait()">Ejecutar Async/Await</button>
+                        </div>
+                        <div id="async-result" class="dom-element">Resultado aparecerá aquí</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Ejemplo Práctico: Obtener Datos de una API</h2>
+            <p>Vamos a obtener datos de una API real (JSONPlaceholder) y mostrarlos en nuestra página.</p>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="openTab(event, 'promise-tab')">Con Promesas</button>
+                    <button class="tab-button" onclick="openTab(event, 'async-tab')">Con Async/Await</button>
+                </div>
+                
+                <div id="promise-tab" class="tab-content active">
+                    <h3>Usando Promesas</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">function</span> <span class="code-function">obtenerPosts</span>() {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-function">fetch</span>(<span class="code-string">'https://jsonplaceholder.typicode.com/posts'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.<span class="code-function">then</span>(response => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (!response.ok) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">throw</span> <span class="code-keyword">new</span> <span class="code-function">Error</span>(<span class="code-string">'Error en la llamada a la API'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> response.<span class="code-function">json</span>();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.<span class="code-function">then</span>(data => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-function">mostrarPosts</span>(data);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.<span class="code-function">catch</span>(error => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.<span class="code-function">log</span>(<span class="code-string">'Error:'</span>, error);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        }
+                    </div>
+                    <button onclick="cargarConPromesas()">Cargar Posts con Promesas</button>
+                </div>
+                
+                <div id="async-tab" class="tab-content">
+                    <h3>Usando Async/Await</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">obtenerPostsConAsyncAwait</span>() {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">let</span> response = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(<span class="code-string">'https://jsonplaceholder.typicode.com/posts'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (!response.ok) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">throw</span> <span class="code-keyword">new</span> <span class="code-function">Error</span>(<span class="code-string">'Error en la llamada a la API'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">let</span> posts = <span class="code-keyword">await</span> response.<span class="code-function">json</span>();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-function">mostrarPosts</span>(posts);<br>
+                        &nbsp;&nbsp;} <span class="code-keyword">catch</span> (error) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.<span class="code-function">log</span>(<span class="code-string">'Error:'</span>, error);<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    <button onclick="cargarConAsyncAwait()">Cargar Posts con Async/Await</button>
+                </div>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Resultado:</h3>
+                <div id="posts-container" class="user-list">
+                    Los posts aparecerán aquí
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Ejercicio Práctico: Comparación Promesas vs Async/Await</h2>
+            <p>El objetivo de este ejercicio es crear una página web que obtenga una lista de usuarios desde una API y muestre sus nombres en una lista usando ambas estrategias.</p>
+            
+            <div class="exercise">
+                <h3>Instrucciones:</h3>
+                <ol>
+                    <li><strong>Crear la estructura HTML:</strong>
+                        <ul>
+                            <li>Dos botones: uno para cargar con promesas y otro con async/await</li>
+                            <li>Un contenedor para mostrar la lista de usuarios</li>
+                        </ul>
+                    </li>
+                    <li><strong>Implementar ambas soluciones:</strong>
+                        <ul>
+                            <li>Usar fetch para obtener datos de https://jsonplaceholder.typicode.com/users</li>
+                            <li>Implementar una solución con promesas (.then/.catch)</li>
+                            <li>Implementar una solución con async/await</li>
+                            <li>Mostrar los resultados en la página</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <h3>Implementación:</h3>
+                <div class="interactive-demo">
+                    <h1>Comparación: Promesas vs Async/Await</h1>
+                    <div class="demo-controls">
+                        <button id="btnPromesas">Cargar con Promesas</button>
+                        <button id="btnAsync">Cargar con Async/Await</button>
+                    </div>
+                    <ul id="user-list" class="user-list">
+                        Los usuarios aparecerán aquí
+                    </ul>
+                </div>
+                
+                <button class="toggle-solution" onclick="toggleSolution('exerciseSolution')">Ver Solución</button>
+                
+                <div id="exerciseSolution" class="solution">
+                    <h4>Solución:</h4>
+                    <div class="code-block">
+                        <span class="code-comment">// HTML</span><br>
+                        &lt;button id="btnPromesas"&gt;Cargar con Promesas&lt;/button&gt;<br>
+                        &lt;button id="btnAsync"&gt;Cargar con Async/Await&lt;/button&gt;<br>
+                        &lt;ul id="user-list"&gt;&lt;/ul&gt;<br><br>
+                        
+                        <span class="code-comment">// JavaScript - Con Promesas</span><br>
+                        <span class="code-keyword">function</span> <span class="code-function">cargarUsuariosConPromesas</span>() {<br>
+                        &nbsp;&nbsp;document.getElementById(<span class="code-string">'user-list'</span>).innerHTML = <span class="code-string">'&lt;li class="loading"&gt;Cargando con promesas...&lt;/li&gt;'</span>;<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;<span class="code-function">fetch</span>(<span class="code-string">'https://jsonplaceholder.typicode.com/users'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.<span class="code-function">then</span>(respuesta => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (!respuesta.ok) <span class="code-keyword">throw</span> <span class="code-keyword">new</span> <span class="code-function">Error</span>(<span class="code-string">"Error en la respuesta"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> respuesta.<span class="code-function">json</span>();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.<span class="code-function">then</span>(data => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-function">mostrarUsuarios</span>(data, <span class="code-string">"Con Promesas"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.<span class="code-function">catch</span>(error => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span class="code-string">'user-list'</span>).innerHTML = <span class="code-string">`&lt;li class="error"&gt;Error: ${error.message}&lt;/li&gt;`</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        }<br><br>
+                        
+                        <span class="code-comment">// JavaScript - Con Async/Await</span><br>
+                        <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">cargarUsuariosConAsync</span>() {<br>
+                        &nbsp;&nbsp;document.getElementById(<span class="code-string">'user-list'</span>).innerHTML = <span class="code-string">'&lt;li class="loading"&gt;Cargando con async/await...&lt;/li&gt;'</span>;<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;<span class="code-keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> respuesta = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(<span class="code-string">'https://jsonplaceholder.typicode.com/users'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (!respuesta.ok) <span class="code-keyword">throw</span> <span class="code-keyword">new</span> <span class="code-function">Error</span>(<span class="code-string">"Error en la respuesta"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> data = <span class="code-keyword">await</span> respuesta.<span class="code-function">json</span>();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-function">mostrarUsuarios</span>(data, <span class="code-string">"Con Async/Await"</span>);<br>
+                        &nbsp;&nbsp;} <span class="code-keyword">catch</span> (error) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span class="code-string">'user-list'</span>).innerHTML = <span class="code-string">`&lt;li class="error"&gt;Error: ${error.message}&lt;/li&gt;`</span>;<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        
+                        <span class="code-comment">// Función para mostrar usuarios</span><br>
+                        <span class="code-keyword">function</span> <span class="code-function">mostrarUsuarios</span>(usuarios, metodo) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">const</span> lista = document.getElementById(<span class="code-string">'user-list'</span>);<br>
+                        &nbsp;&nbsp;lista.innerHTML = <span class="code-string">`&lt;li&gt;&lt;strong&gt;${metodo}&lt;/strong&gt;&lt;/li&gt;`</span>;<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;usuarios.<span class="code-function">forEach</span>(usuario => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> li = document.<span class="code-function">createElement</span>(<span class="code-string">"li"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;li.className = <span class="code-string">"user-item"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;li.textContent = <span class="code-string">`${usuario.name} - ${usuario.email}`</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;lista.<span class="code-function">appendChild</span>(li);<br>
+                        &nbsp;&nbsp;});<br>
+                        }<br><br>
+                        
+                        <span class="code-comment">// Event listeners</span><br>
+                        document.getElementById(<span class="code-string">'btnPromesas'</span>).<span class="code-function">addEventListener</span>(<span class="code-string">'click'</span>, cargarUsuariosConPromesas);<br>
+                        document.getElementById(<span class="code-string">'btnAsync'</span>).<span class="code-function">addEventListener</span>(<span class="code-string">'click'</span>, cargarUsuariosConAsync);
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>© 2024 - Promesas y Asincronía en JavaScript</p>
+        <p>Programación de Dispositivos Móviles - Jesús Minero</p>
+    </footer>
+
+    <script>
+        // Funciones para los ejemplos
+        function ejecutarCallback() {
+            const num1 = parseInt(document.getElementById('num1').value) || 0;
+            const num2 = parseInt(document.getElementById('num2').value) || 0;
+            
+            function sumar(a, b, callback) {
+                const resultado = a + b;
+                callback(resultado);
+            }
+            
+            function mostrarResultado(resultado) {
+                document.getElementById('callback-result').textContent = `La suma es: ${resultado}`;
+            }
+            
+            sumar(num1, num2, mostrarResultado);
+        }
+        
+        function ejecutarPromesa() {
+            const exito = document.getElementById('promiseSuccess').checked;
+            const resultElement = document.getElementById('promise-result');
+            
+            const miPromesa = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (exito) {
+                        resolve("¡Operación exitosa!");
+                    } else {
+                        reject("Ocurrió un error.");
+                    }
+                }, 1000);
+            });
+            
+            resultElement.textContent = "Procesando...";
+            
+            miPromesa
+                .then((resultado) => {
+                    resultElement.textContent = resultado;
+                    resultElement.style.color = "green";
+                })
+                .catch((error) => {
+                    resultElement.textContent = error;
+                    resultElement.style.color = "red";
+                });
+        }
+        
+        function ejecutarAsyncAwait() {
+            const resultElement = document.getElementById('async-result');
+            
+            async function simularAsync() {
+                resultElement.textContent = "Procesando...";
+                
+                try {
+                    // Simulamos una operación asíncrona con un timeout
+                    const resultado = await new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve("¡Async/Await completado!");
+                        }, 1000);
+                    });
+                    
+                    resultElement.textContent = resultado;
+                    resultElement.style.color = "green";
+                } catch (error) {
+                    resultElement.textContent = error;
+                    resultElement.style.color = "red";
+                }
+            }
+            
+            simularAsync();
+        }
+        
+        // Funciones para el ejemplo de API
+        function mostrarPosts(posts) {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = '';
+            
+            // Mostrar solo los primeros 10 posts para no saturar
+            posts.slice(0, 10).forEach(post => {
+                const div = document.createElement('div');
+                div.className = 'user-item';
+                div.innerHTML = `<strong>${post.title}</strong><br>${post.body.substring(0, 50)}...`;
+                container.appendChild(div);
+            });
+        }
+        
+        function cargarConPromesas() {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = '<div class="loading">Cargando posts con promesas...</div>';
+            
+            fetch('https://jsonplaceholder.typicode.com/posts')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la llamada a la API');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    mostrarPosts(data);
+                })
+                .catch(error => {
+                    container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                });
+        }
+        
+        async function cargarConAsyncAwait() {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = '<div class="loading">Cargando posts con async/await...</div>';
+            
+            try {
+                let response = await fetch('https://jsonplaceholder.typicode.com/posts');
+                if (!response.ok) {
+                    throw new Error('Error en la llamada a la API');
+                }
+                let posts = await response.json();
+                mostrarPosts(posts);
+            } catch (error) {
+                container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Funciones para el ejercicio
+        function cargarUsuariosConPromesas() {
+            const lista = document.getElementById("user-list");
+            lista.innerHTML = '<li class="loading">Cargando con promesas...</li>';
+            
+            fetch('https://jsonplaceholder.typicode.com/users')
+                .then(respuesta => {
+                    if (!respuesta.ok) throw new Error("Error en la respuesta");
+                    return respuesta.json();
+                })
+                .then(data => {
+                    mostrarUsuarios(data, "Con Promesas");
+                })
+                .catch(error => {
+                    lista.innerHTML = `<li class="error">Error: ${error.message}</li>`;
+                });
+        }
+        
+        async function cargarUsuariosConAsync() {
+            const lista = document.getElementById("user-list");
+            lista.innerHTML = '<li class="loading">Cargando con async/await...</li>';
+            
+            try {
+                const respuesta = await fetch('https://jsonplaceholder.typicode.com/users');
+                if (!respuesta.ok) throw new Error("Error en la respuesta");
+                const data = await respuesta.json();
+                mostrarUsuarios(data, "Con Async/Await");
+            } catch (error) {
+                lista.innerHTML = `<li class="error">Error: ${error.message}</li>`;
+            }
+        }
+        
+        function mostrarUsuarios(usuarios, metodo) {
+            const lista = document.getElementById("user-list");
+            lista.innerHTML = `<li><strong>${metodo}</strong></li>`;
+            
+            usuarios.forEach(usuario => {
+                const li = document.createElement("li");
+                li.className = "user-item";
+                li.textContent = `${usuario.name} - ${usuario.email}`;
+                lista.appendChild(li);
+            });
+        }
+        
+        // Configurar event listeners para el ejercicio
+        document.getElementById('btnPromesas').addEventListener('click', cargarUsuariosConPromesas);
+        document.getElementById('btnAsync').addEventListener('click', cargarUsuariosConAsync);
+        
+        // Funciones auxiliares
+        function openTab(evt, tabName) {
+            const tabcontent = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            const tabbuttons = document.getElementsByClassName("tab-button");
+            for (let i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+        
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+            } else {
+                solution.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

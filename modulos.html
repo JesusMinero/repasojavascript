@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulos en JavaScript</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .back-button {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+        }
+        
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        h3 {
+            color: var(--primary);
+            margin: 1.5rem 0 1rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+        
+        .code-comment {
+            color: #75715e;
+        }
+        
+        .code-keyword {
+            color: #f92672;
+        }
+        
+        .code-function {
+            color: #e6db74;
+        }
+        
+        .code-variable {
+            color: #a6e22e;
+        }
+        
+        .code-string {
+            color: #ae81ff;
+        }
+        
+        .example-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .code-example, .output-example {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .output-example {
+            background-color: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .interactive-demo {
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border: 1px solid #ddd;
+        }
+        
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: var(--secondary);
+        }
+        
+        input, select {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .exercise {
+            background-color: #e8f4fc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .exercise h3 {
+            color: var(--accent);
+        }
+        
+        .solution {
+            display: none;
+            margin-top: 1rem;
+        }
+        
+        .toggle-solution {
+            background-color: var(--accent);
+            margin-top: 1rem;
+        }
+        
+        .tab-container {
+            margin: 2rem 0;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .tab-button {
+            padding: 1rem 1.5rem;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .tab-button.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .highlight {
+            background-color: yellow;
+        }
+        
+        .dom-element {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .file-structure {
+            background-color: #f0f0f0;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 1rem 0;
+        }
+        
+        .file-item {
+            padding: 0.25rem 0;
+        }
+        
+        .file-item::before {
+            content: "📄 ";
+        }
+        
+        .folder::before {
+            content: "📁 ";
+        }
+        
+        .console-output {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: monospace;
+            height: 200px;
+            overflow-y: auto;
+            margin: 1rem 0;
+        }
+        
+        .console-line {
+            margin: 0.25rem 0;
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .example-container {
+                flex-direction: column;
+            }
+            
+            .tab-buttons {
+                flex-direction: column;
+            }
+            
+            .back-button {
+                position: relative;
+                left: 0;
+                top: 0;
+                transform: none;
+                margin-bottom: 1rem;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-button">← Volver al Índice</a>
+        <h1>Módulos en JavaScript</h1>
+        <p class="subtitle">Importación y exportación de módulos en JavaScript</p>
+    </header>
+    
+    <div class="container">
+        <section class="section">
+            <h2>Introducción a los Módulos</h2>
+            <p>Los módulos en JavaScript permiten dividir el código en archivos separados, lo que facilita la organización, el mantenimiento y la reutilización del código.</p>
+            <p>Antes de comenzar con React Native, es fundamental entender los conceptos de módulos en JavaScript por varias razones:</p>
+            <ul>
+                <li><strong>Modularidad y Organización del Código:</strong> React Native se basa en una estructura modular donde el código se divide en componentes reutilizables.</li>
+                <li><strong>Importación y Exportación de Componentes:</strong> En React Native, cada componente generalmente se define en su propio archivo y se importa según sea necesario.</li>
+                <li><strong>Reutilización de Código:</strong> La capacidad de reutilizar código es crucial en el desarrollo moderno.</li>
+            </ul>
+        </section>
+        
+        <section class="section">
+            <h2>Exportación de Módulos</h2>
+            <p>Para exportar funciones, variables u objetos desde un módulo, usamos <code>export</code>. Hay dos formas principales de exportación: exportaciones nombradas y exportación por defecto.</p>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="openTab(event, 'named-export')">Exportaciones Nombradas</button>
+                    <button class="tab-button" onclick="openTab(event, 'default-export')">Exportación por Defecto</button>
+                </div>
+                
+                <div id="named-export" class="tab-content active">
+                    <h3>Exportaciones Nombradas</h3>
+                    <div class="code-block">
+                        <span class="code-comment">// archivo: saludo.js</span><br>
+                        <span class="code-keyword">export const</span> <span class="code-function">saludo</span> = () => {<br>
+                        &nbsp;&nbsp;console.<span class="code-function">log</span>(<span class="code-string">"¡Hola, Mundo!"</span>);<br>
+                        };<br><br>
+                        
+                        <span class="code-keyword">export const</span> <span class="code-function">despedida</span> = () => {<br>
+                        &nbsp;&nbsp;console.<span class="code-function">log</span>(<span class="code-string">"¡Adiós, Mundo!"</span>);<br>
+                        };
+                    </div>
+                </div>
+                
+                <div id="default-export" class="tab-content">
+                    <h3>Exportación por Defecto</h3>
+                    <div class="code-block">
+                        <span class="code-comment">// archivo: mensaje.js</span><br>
+                        <span class="code-keyword">const</span> mensaje = <span class="code-string">"Mensaje por defecto"</span>;<br>
+                        <span class="code-keyword">export default</span> mensaje;
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Importación de Módulos</h2>
+            <p>Para importar funciones, variables u objetos desde un módulo, usamos <code>import</code>.</p>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="openTab(event, 'named-import')">Importaciones Nombradas</button>
+                    <button class="tab-button" onclick="openTab(event, 'default-import')">Importación por Defecto</button>
+                </div>
+                
+                <div id="named-import" class="tab-content active">
+                    <h3>Importaciones Nombradas</h3>
+                    <div class="code-block">
+                        <span class="code-comment">// archivo: main.js</span><br>
+                        <span class="code-keyword">import</span> { saludo, despedida } <span class="code-keyword">from</span> <span class="code-string">'./saludo.js'</span>;<br><br>
+                        
+                        <span class="code-function">saludo</span>(); <span class="code-comment">// ¡Hola, Mundo!</span><br>
+                        <span class="code-function">despedida</span>(); <span class="code-comment">// ¡Adiós, Mundo!</span>
+                    </div>
+                </div>
+                
+                <div id="default-import" class="tab-content">
+                    <h3>Importación por Defecto</h3>
+                    <div class="code-block">
+                        <span class="code-comment">// archivo: main.js</span><br>
+                        <span class="code-keyword">import</span> mensaje <span class="code-keyword">from</span> <span class="code-string">'./mensaje.js'</span>;<br><br>
+                        
+                        console.<span class="code-function">log</span>(mensaje); <span class="code-comment">// Mensaje por defecto</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Ejercicio: Organizar un Programa en Módulos</h2>
+            <p>Vamos a crear un proyecto simple que demuestre el uso de módulos en JavaScript.</p>
+            
+            <div class="file-structure">
+                <div class="folder">miproyecto/</div>
+                <div class="file-item">index.html</div>
+                <div class="file-item">main.js</div>
+                <div class="file-item">saludo.js</div>
+                <div class="file-item">despedida.js</div>
+                <div class="file-item">mensaje.js</div>
+                <div class="file-item">math.js</div>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="openTab(event, 'saludo-file')">saludo.js</button>
+                    <button class="tab-button" onclick="openTab(event, 'despedida-file')">despedida.js</button>
+                    <button class="tab-button" onclick="openTab(event, 'mensaje-file')">mensaje.js</button>
+                    <button class="tab-button" onclick="openTab(event, 'math-file')">math.js</button>
+                    <button class="tab-button" onclick="openTab(event, 'main-file')">main.js</button>
+                    <button class="tab-button" onclick="openTab(event, 'html-file')">index.html</button>
+                </div>
+                
+                <div id="saludo-file" class="tab-content active">
+                    <h3>saludo.js</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">export const</span> <span class="code-function">saludo</span> = () => {<br>
+                        &nbsp;&nbsp;console.<span class="code-function">log</span>(<span class="code-string">"¡Hola, Mundo!"</span>);<br>
+                        };
+                    </div>
+                </div>
+                
+                <div id="despedida-file" class="tab-content">
+                    <h3>despedida.js</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">export const</span> <span class="code-function">despedida</span> = () => {<br>
+                        &nbsp;&nbsp;console.<span class="code-function">log</span>(<span class="code-string">"¡Adiós, Mundo!"</span>);<br>
+                        };
+                    </div>
+                </div>
+                
+                <div id="mensaje-file" class="tab-content">
+                    <h3>mensaje.js</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> mensaje = <span class="code-string">"Mensaje por defecto"</span>;<br>
+                        <span class="code-keyword">export default</span> mensaje;
+                    </div>
+                </div>
+                
+                <div id="math-file" class="tab-content">
+                    <h3>math.js</h3>
+                    <div class="code-block">
+                        <span class="code-keyword">export const</span> <span class="code-function">suma</span> = (a, b) => a + b;<br>
+                        <span class="code-keyword">export const</span> <span class="code-function">resta</span> = (a, b) => a - b;<br>
+                        <span class="code-keyword">export const</span> <span class="code-function">multiplicacion</span> = (a, b) => a * b;<br>
+                        <span class="code-keyword">export const</span> <span class="code-function">division</span> = (a, b) => a / b;
+                    </div>
+                </div>
+                
+                <div id="main-file" class="tab-content">
+                    <h3>main.js</h3>
+                    <div class="code-block">
+                        <span class="code-comment">// Importar módulos</span><br>
+                        <span class="code-keyword">import</span> { saludo } <span class="code-keyword">from</span> <span class="code-string">'./saludo.js'</span>;<br>
+                        <span class="code-keyword">import</span> { despedida } <span class="code-keyword">from</span> <span class="code-string">'./despedida.js'</span>;<br>
+                        <span class="code-keyword">import</span> mensaje <span class="code-keyword">from</span> <span class="code-string">'./mensaje.js'</span>;<br>
+                        <span class="code-keyword">import</span> { suma, resta, multiplicacion, division } <span class="code-keyword">from</span> <span class="code-string">'./math.js'</span>;<br><br>
+                        
+                        <span class="code-comment">// Usar las funciones importadas</span><br>
+                        <span class="code-function">saludo</span>();<br>
+                        <span class="code-function">despedida</span>();<br>
+                        console.<span class="code-function">log</span>(mensaje);<br><br>
+                        
+                        <span class="code-comment">// Usar funciones matemáticas</span><br>
+                        console.<span class="code-function">log</span>(<span class="code-function">suma</span>(2, 3));<br>
+                        console.<span class="code-function">log</span>(<span class="code-function">resta</span>(5, 2));<br>
+                        console.<span class="code-function">log</span>(<span class="code-function">multiplicacion</span>(4, 3));<br>
+                        console.<span class="code-function">log</span>(<span class="code-function">division</span>(10, 2));
+                    </div>
+                </div>
+                
+                <div id="html-file" class="tab-content">
+                    <h3>index.html</h3>
+                    <div class="code-block">
+                        &lt;!DOCTYPE html&gt;<br>
+                        &lt;html lang="es"&gt;<br>
+                        &lt;head&gt;<br>
+                        &nbsp;&nbsp;&lt;meta charset="UTF-8"&gt;<br>
+                        &nbsp;&nbsp;&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;<br>
+                        &nbsp;&nbsp;&lt;title&gt;Ejemplo de Módulos en JavaScript&lt;/title&gt;<br>
+                        &lt;/head&gt;<br>
+                        &lt;body&gt;<br>
+                        &nbsp;&nbsp;&lt;h1&gt;Ejemplo de Módulos en JavaScript&lt;/h1&gt;<br>
+                        &nbsp;&nbsp;&lt;script type="module" src="main.js"&gt;&lt;/script&gt;<br>
+                        &lt;/body&gt;<br>
+                        &lt;/html&gt;
+                    </div>
+                </div>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Resultado:</h3>
+                <div class="console-output" id="console-output">
+                    <div class="console-line">Ejecuta el código para ver los resultados...</div>
+                </div>
+                <button onclick="ejecutarModulos()">Ejecutar Módulos</button>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Ejercicio Práctico</h2>
+            <p>Crea 2 módulos más para manejar diferentes partes de la lógica de la aplicación, como funciones matemáticas, manipulación de cadenas, etc.</p>
+            
+            <div class="exercise">
+                <h3>Instrucciones:</h3>
+                <ol>
+                    <li><strong>Crear un módulo para manipulación de cadenas:</strong>
+                        <ul>
+                            <li>Función para convertir a mayúsculas</li>
+                            <li>Función para convertir a minúsculas</li>
+                            <li>Función para capitalizar la primera letra</li>
+                        </ul>
+                    </li>
+                    <li><strong>Crear un módulo para utilidades:</strong>
+                        <ul>
+                            <li>Función para formatear fechas</li>
+                            <li>Función para generar números aleatorios</li>
+                            <li>Función para validar emails</li>
+                        </ul>
+                    </li>
+                    <li><strong>Importar y usar estos módulos en main.js</strong></li>
+                </ol>
+                
+                <button class="toggle-solution" onclick="toggleSolution('exerciseSolution')">Ver Solución</button>
+                
+                <div id="exerciseSolution" class="solution">
+                    <h4>Solución:</h4>
+                    
+                    <h5>cadena.js</h5>
+                    <div class="code-block">
+                        <span class="code-comment">// cadena.js</span><br>
+                        <span class="code-keyword">export const</span> <span class="code-function">aMayusculas</span> = (texto) => texto.<span class="code-function">toUpperCase</span>();<br>
+                        <span class="code-keyword">export const</span> <span class="code-function">aMinusculas</span> = (texto) => texto.<span class="code-function">toLowerCase</span>();<br>
+                        <span class="code-keyword">export const</span> <span class="code-function">capitalizar</span> = (texto) => texto.<span class="code-function">charAt</span>(0).<span class="code-function">toUpperCase</span>() + texto.<span class="code-function">slice</span>(1);<br>
+                    </div>
+                    
+                    <h5>utilidades.js</h5>
+                    <div class="code-block">
+                        <span class="code-comment">// utilidades.js</span><br>
+                        <span class="code-keyword">export const</span> <span class="code-function">formatearFecha</span> = (fecha) => {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">new</span> <span class="code-function">Date</span>(fecha).<span class="code-function">toLocaleDateString</span>();<br>
+                        };<br><br>
+                        
+                        <span class="code-keyword">export const</span> <span class="code-function">numeroAleatorio</span> = (min, max) => {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> Math.<span class="code-function">floor</span>(Math.<span class="code-function">random</span>() * (max - min + 1)) + min;<br>
+                        };<br><br>
+                        
+                        <span class="code-keyword">export const</span> <span class="code-function">validarEmail</span> = (email) => {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">const</span> regex = <span class="code-string">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>;<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> regex.<span class="code-function">test</span>(email);<br>
+                        };
+                    </div>
+                    
+                    <h5>main.js (actualizado)</h5>
+                    <div class="code-block">
+                        <span class="code-comment">// Importar módulos adicionales</span><br>
+                        <span class="code-keyword">import</span> { aMayusculas, aMinusculas, capitalizar } <span class="code-keyword">from</span> <span class="code-string">'./cadena.js'</span>;<br>
+                        <span class="code-keyword">import</span> { formatearFecha, numeroAleatorio, validarEmail } <span class="code-keyword">from</span> <span class="code-string">'./utilidades.js'</span>;<br><br>
+                        
+                        <span class="code-comment">// Usar las nuevas funciones</span><br>
+                        console.<span class="code-function">log</span>(<span class="code-function">aMayusculas</span>(<span class="code-string">"hola mundo"</span>));<br>
+                        console.<span class="code-function">log</span>(<span class="code-function">capitalizar</span>(<span class="code-string">"javascript"</span>));<br>
+                        console.<span class="code-function">log</span>(<span class="code-function">formatearFecha</span>(<span class="code-string">"2024-08-30"</span>));<br>
+                        console.<span class="code-function">log</span>(<span class="code-function">numeroAleatorio</span>(1, 100));<br>
+                        console.<span class="code-function">log</span>(<span class="code-function">validarEmail</span>(<span class="code-string">"ejemplo@correo.com"</span>));
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>© 2024 - Módulos en JavaScript</p>
+        <p>Programación de Dispositivos Móviles - Jesús Minero</p>
+    </footer>
+
+    <script>
+        // Funciones para los ejemplos
+        function ejecutarModulos() {
+            const consoleOutput = document.getElementById('console-output');
+            consoleOutput.innerHTML = '';
+            
+            // Simular la ejecución de los módulos
+            const lineas = [
+                "¡Hola, Mundo!",
+                "¡Adiós, Mundo!",
+                "Mensaje por defecto",
+                "5",
+                "3",
+                "12",
+                "5"
+            ];
+            
+            let i = 0;
+            const intervalo = setInterval(() => {
+                if (i < lineas.length) {
+                    const linea = document.createElement('div');
+                    linea.className = 'console-line';
+                    linea.textContent = lineas[i];
+                    consoleOutput.appendChild(linea);
+                    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                    i++;
+                } else {
+                    clearInterval(intervalo);
+                }
+            }, 500);
+        }
+        
+        // Funciones auxiliares
+        function openTab(evt, tabName) {
+            const tabcontent = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            const tabbuttons = document.getElementsByClassName("tab-button");
+            for (let i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+        
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+            } else {
+                solution.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
